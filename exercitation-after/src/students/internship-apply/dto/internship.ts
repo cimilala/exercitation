@@ -1,0 +1,1 @@
+export enum IntershipType {priduct = "生产实习",self = "自主实习"}
