@@ -1,20 +1,26 @@
 <script setup lang="ts">
-import {  onMounted,  } from "vue";
-import { useTokenStore } from "./stores/token";
-import { useUserStore } from "./stores/user";
-const tokenstore = useTokenStore();
-const userstore = useUserStore()
-onMounted(() => {
-  tokenstore.gettoken();
-  userstore.saveUser()
-});
-
+// import {  onMounted,  } from "vue";
+// import { useUserStore } from "./stores/user";
+// import {useMenuStore} from "./stores/menu"
+// const userstore = useUserStore()
+// const menuStore= useMenuStore()
+// onMounted(()=>{
+//   userstore.saveUser()
+//   menuStore.saveMenuList()
+// })
+  
 </script>
 
 <template>
-  <RouterView ></RouterView>
+  <div class="app">
+    <RouterView ></RouterView>
+  </div>
+  
 </template>
 
 <style lang="less" scoped>
-  
+  .app{
+    width: 100vw;
+    min-height: 100vh;
+  }
 </style>

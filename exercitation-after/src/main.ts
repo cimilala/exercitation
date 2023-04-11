@@ -1,18 +1,15 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { JwtAuthGuard } from './auth/auth.guard';
 import { HttpExceptionFilter } from './utils/filter/http-exception.filter';
 import {  authMiddleware, } from './utils/middleware/auth-middleware';
 import { TransformInterceptor } from './utils/interceptor/transformm.interceptor';
-
-
-
+import { JwtAuthGuard } from './utils/guard/jwt-guard';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors()
   app.use(authMiddleware)//全局中间件
-  app.useGlobalGuards(new JwtAuthGuard());//全局守卫 校验token
+  // app.useGlobalGuards(new JwtAuthGuard());//全局守卫 校验token
   app.useGlobalInterceptors(new TransformInterceptor())//全局拦截器 (next.handle()执行前)
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,

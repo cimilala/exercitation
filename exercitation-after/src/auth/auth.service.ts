@@ -1,16 +1,15 @@
 import {  Injectable, NotFoundException } from '@nestjs/common';
-import { StuUserService } from '../students/stu-user/stu-user.service';
+import { UserService } from 'src/user/user.service';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly  stuUserService:StuUserService,
+   
+    private readonly userService:UserService,
   ) {}
   //校验用户的用户名和密码
   async validateUser(username:string,password:string) {
-    const person = await this.stuUserService.findOne(username);
+    const person = await this.userService.login(username)
       if(person&&person.password === password){
-     
-        
         const {password,...userInfo} = person
         return userInfo;
       }else if(person&&person.password !== password){
@@ -23,10 +22,5 @@ export class AuthService {
   }
   
     
- //用户成功登录后获取该用户信息
-  async getUserInfo(username:string){
-  const person = await this.stuUserService.findOne(username);
-  const {password,...userInfo} = person
-  return userInfo
- } 
+ 
 }

@@ -11,15 +11,15 @@
       <el-button :icon="View" size="small">详情</el-button>
       <el-button size="small">
         Upload<el-icon class="el-icon--right">
-          <Upload />
+        
         </el-icon>
       </el-button>
     </div>
     <div style="display: flex; justify-content: space-evenly">
-      <RouterLink to="/draft/draft_change">实习变更</RouterLink>
-      <RouterLink to="/draft/draft_leave">请假申请</RouterLink>
-      <RouterLink to="/draft/draft_news">实习日报</RouterLink>
-      <RouterLink to="/draft/draft_summary">实习总结</RouterLink>
+      <RouterLink to="/main/draft/draft_change">实习变更</RouterLink>
+      <RouterLink to="/main/draft/draft_leave">请假申请</RouterLink>
+      <RouterLink to="/main/draft/draft_news">实习日报</RouterLink>
+      <RouterLink to="/main/draft/draft_summary">实习总结</RouterLink>
     </div>
 
     <RouterView></RouterView>

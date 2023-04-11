@@ -48,11 +48,8 @@
       <el-button :icon="Edit" size="small">修改</el-button>
       <el-button :icon="Delete" size="small">删除</el-button>
       <el-button :icon="View" size="small">详情</el-button>
-      <el-button size="small">
-        Upload<el-icon class="el-icon--right">
-          <Upload />
-        </el-icon>
-      </el-button>
+      <el-button :icon="Upload" size="small"> Upload</el-button>
+       
     </div>
     <div class="table">
       <el-table :data="filtableData" border style="width: 100%">
@@ -105,15 +102,15 @@ import {
   Search,
   RefreshLeft,
 } from "@element-plus/icons-vue";
-import { updateUSerinfo, reqIntershipList } from "@/utils/api";
+import { updateUserStatus, IntershipList, getUserStatus } from "@/utils/api";
 import { onMounted, reactive, ref, toRaw } from "vue";
 import { useUserStore } from "@/stores/user";
 import type { FormInstance } from "element-plus";
-import type { Apply, enumApply, keyType } from "@/utils/type";
 const store = useUserStore();
-const { apply_status, select_id } = toRaw(store.user);
 let tableData = ref<Apply[]>([]);
 let filtableData = ref<Apply[]>([]);
+const apply_status = ref(0)
+const select_id = ref(0)
 const typeChange = (scope: any) => {
   switch (scope.row.apply_status) {
     case 1:
@@ -181,8 +178,8 @@ const search = () => {
   });
   //根据筛选条件过滤数据
   filtableData.value = filterArray.reduce(
-    (pre: Apply[], key: string) => {
-      return pre.filter((item: Apply) => {
+    (pre,key) => {
+      return pre.filter((item) => {
         return item[key as enumApply] === ruleForm[key as keyType];
       });
     },
@@ -213,7 +210,7 @@ const handleApplyClick = (index: number, row: any) => {
     selectobj.operation = 1;
   }
 
-  updateUSerinfo(`/stuUpdate/${store.user.id}`, {
+  updateUserStatus(`/stu_status/${store.user?.id}`, {
     apply_status: 1,
     select_id: row.id,
   });
@@ -226,18 +223,25 @@ const handleApplyCancel = (index: number, row: Apply) => {
     selectobj.apply_status = 0;
     selectobj.operation = 0;
   }
-
-  updateUSerinfo(`/stuUpdate/${store.user.id}`, {
+  updateUserStatus(`/stu_status/${store.user?.id}`, {
     apply_status: 0,
     select_id: 0,
   });
 };
+
+onMounted(async ()=>{
+  const res = await getUserStatus("/stu_status/getOne",{userId:store.user?.id})
+  if(res.status===200){
+    select_id.value =  res.data.select_id
+    apply_status.value = res.data.apply_status
+  }
+})
 onMounted(async () => {
-  const list = await reqIntershipList("/internshipapply/stu/getall");
+  const list = await IntershipList("/internshipapply");
   if (list.status === 200) {
     tableData.value = list.data.map((item: Apply) => {
-      if (item.id === select_id) {
-        return { ...item, apply_status, operation: apply_status };
+      if (item.id === select_id.value) {
+        return { ...item, apply_status:apply_status.value, operation: apply_status.value };
       } else {
         return { ...item, apply_status: 0, operation: 0 };
       }

@@ -9,11 +9,7 @@
       <el-button :icon="Edit" size="small">修改</el-button>
       <el-button :icon="Delete" size="small">删除</el-button>
       <el-button :icon="View" size="small">详情</el-button>
-      <el-button size="small">
-        Upload<el-icon class="el-icon--right">
-          <Upload />
-        </el-icon>
-      </el-button>
+    
     </div>
     <div class="table">
       <el-table :data="tableData" border style="width: 100%">

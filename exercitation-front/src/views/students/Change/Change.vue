@@ -10,24 +10,13 @@
       <el-button type="info" :icon="RefreshLeft" @click="resetForm(ruleFormRef)">重置</el-button>
 
     </div>
-    <!-- <div class="operation">
-      <el-button :icon="Plus" size="small">新增</el-button>
-      <el-button :icon="Edit" size="small">修改</el-button>
-      <el-button :icon="Delete" size="small">删除</el-button>
-      <el-button :icon="View" size="small">详情</el-button>
-      <el-button size="small">
-        Upload<el-icon class="el-icon--right">
-          <Upload />
-        </el-icon>
-      </el-button>
-    </div> -->
 
     <el-form ref="ruleFormRef" 
     :model="ruleForm" 
     status-icon 
     class="demo-ruleForm"  
     label-width="100px"
-    :rules=rules
+   :rules="rules"
     >
       <div style="width: 300px;">
         <el-form-item label="姓名" prop="name">
@@ -73,11 +62,12 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance } from "element-plus";
+import type { FormInstance, FormItemRule } from "element-plus";
 import {  reactive, ref, toRaw, } from "vue";
-import BasicEditor from "@/components/common/BasicEditor/BasicEditor.vue"
+import BasicEditor from "@/components/BasicEditor/BasicEditor.vue"
 import { Check, Position, RefreshLeft, } from '@element-plus/icons-vue'
 import mitt from "@/utils/mitt";
+import type { Arrayable } from "element-plus/es/utils/typescript";
 const valueHtml = (valueHtml: string)=>{
 console.log(valueHtml);
 }
@@ -95,13 +85,14 @@ const ruleForm= reactive({
   changePosition: '',
   stu_nember:''
 })
-const ruleFormMap:Record<string, Object[]|string>= Object.assign({},toRaw(ruleForm))
-Object.keys(ruleFormMap).forEach((item:string)=>{
+
+const ruleFormMap:Record<string,string|any[]>= Object.assign({},toRaw(ruleForm))
+Object.keys(ruleFormMap).forEach((item)=>{
   ruleFormMap[item] = [ { required: true, message: '请输入', trigger: 'blur' }]
   }
  
 )
-const rules = reactive(ruleFormMap)
+const rules = ruleFormMap as Partial<Record<string, Arrayable<FormItemRule>>>
 const saveDraft = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {

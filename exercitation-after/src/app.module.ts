@@ -2,17 +2,18 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { StuCommonModule } from './students/stuCommon.module';
-import { ScTeacherCommonModule } from './schoolTeacher/scTeacherCom.module';
 import { AuthModule } from './auth/auth.module';
 import { UploadModule } from './upload/upload.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { RoleModule } from './role/role.module';
+import { StuInfoModule } from './stu_info/stu_info.module';
+import { MenuModule } from './menu/menu.module';
+import { RoleMenuModule } from './role_menu/role_menu.module';
+import { UserModule } from './user/user.module';
 @Module({
   imports: [
     AuthModule,
-    StuCommonModule,
-    ScTeacherCommonModule,
     UploadModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -29,6 +30,10 @@ import { join } from 'path';
       exclude: ['/api*'],
       serveRoot: '/',
     }),
+    RoleModule,
+    StuInfoModule,
+    MenuModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [AppService],

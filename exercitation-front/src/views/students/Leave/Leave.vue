@@ -76,7 +76,7 @@ import { User } from "@element-plus/icons-vue";
 import type { FormInstance, UploadUserFile, } from "element-plus";
 import { reactive, ref } from "vue";
 import { Check, Position, RefreshLeft, } from '@element-plus/icons-vue'
-import Upload from "@/components/common/Upload/Upload.vue"
+import Upload from "@/components/Upload/Upload.vue"
 const value1 = ref('')
 const value2 = ref('')
 const textarea = ref('')

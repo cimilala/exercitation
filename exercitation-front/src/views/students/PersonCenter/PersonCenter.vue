@@ -6,7 +6,7 @@
           <div class="header_touxiang">
             <img :src="url" alt="" />
           </div>
-          <div>{{ user.username }}</div>
+          <div>{{ user?.username }}</div>
           <div class="header_info">
             <div>
               <el-icon :size="20">
@@ -79,7 +79,7 @@ import {
   Phone,
   Location,
 } from "@element-plus/icons-vue";
-import Echarts from "@/components/common/Echarts/Echarts.vue";
+import Echarts from "@/components/Echarts/Echarts.vue";
 const textarea = ref("");
 const url = ref("");
 const store = useUserStore();
@@ -123,7 +123,7 @@ const option = ref({
 watch(
   user,
   () => {
-    url.value = `http://localhost:3000/images/${user.value.photo}.jpg`;
+    url.value = `http://localhost:3000/images/${user.value?.photo}.jpg`;
   },
   { immediate: true }
 );

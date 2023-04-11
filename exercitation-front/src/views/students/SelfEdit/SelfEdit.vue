@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, toRefs } from "vue";
-import Upload from "@/components/common/Upload/Upload.vue"
+import Upload from "@/components/Upload/Upload.vue"
 import type { UploadUserFile } from "element-plus";
 import { useUserStore } from "@/stores/user";
 const store = useUserStore()
@@ -58,7 +58,7 @@ const { user } = toRefs(store)
 const fileList = ref<UploadUserFile[]>([
   {
     name: 'plant-1.png',
-    url: `http://localhost:3000/images/${user.value.photo}.jpg`,
+    url: `http://localhost:3000/images/${user.value?.photo}.jpg`,
   },
 
 ])
