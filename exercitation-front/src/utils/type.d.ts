@@ -35,7 +35,7 @@ enum IntershipType {
   teacher: string;
   type: IntershipType;
   //伪属性
-  apply_status: number;
+  status: number;
   operation: number;
 }
  type itemType = Partial<Apply>;

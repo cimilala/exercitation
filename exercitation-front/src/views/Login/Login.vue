@@ -92,7 +92,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 </script>
 
 <template>
-  <img src="@/assets/image/loginbg.jpg" />
+  <!-- <img src="@/assets/image/loginbg.jpg" /> -->
   <div class="background">
     <div class="login">
       <div class="title"><span style="color: black">实习管理系统</span></div>

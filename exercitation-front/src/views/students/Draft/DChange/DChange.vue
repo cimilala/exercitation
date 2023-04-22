@@ -1,107 +1,113 @@
 <template>
-        <div class="table">
-      <el-table :data="filtableData" border style="width: 100%">
-        <el-table-column prop="name" label="姓名" align="center" />
-        <el-table-column prop="sex" label="性别" align="center" />
-        <el-table-column prop="class" label="班级" align="center" />
-        <el-table-column prop="initInter" label="原实习单位" align="center" />
-        <el-table-column prop="changeInter" label="新实习单位" align="center" />
-        <el-table-column prop="initPosition" label="原实习方向" align="center" />
-        <el-table-column prop="changePosition" label="现实习方向" align="center" />
-        <el-table-column prop="apply_status" label="审核状态" align="center">
-          <template #default="scope">
-            <el-tag :type="typeChange(scope)"
-              ><span >{{ satusChange(scope) }}</span>
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="opreation" label="操作" align="center">
-          <template #default="scope">
-            <el-button
-              link
-              type="primary"
-              size="small"
-              @click="handleApplyClick(scope.$index, scope.row)"
-              ><span class="isapply">{{ isapply(scope) }}</span></el-button
-            >
-            <el-button
-              link
-              type="primary"
-              size="small"
-              @click="handleDelete(scope.$index, scope.row)"
-              >删除</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <Table 
+    :options="options" 
+    :tableData="tableData"
+    :on-apply="handleApplyClick"
+    :on-delete="handleDelete"
+    :apply="true"
+    :cancel="false"
+    :delete-show="true"
+    :editor="true"
+    :width="'220px'"
+    />
 </template>
     
 <script setup lang='ts'>
-import mitt from '@/utils/mitt';
-import { onDeactivated, onMounted, ref } from 'vue';
-   const filtableData= ref<any>([
-  
-   ])
- 
-    mitt.on("tableList",(value)=>{
-    filtableData.value.push(value)
-   console.log(value);
-   
-    
-   })
-
-   const typeChange = (scope: any) => {
-  switch (scope.row.apply_status) {
-    case 1:
-      return "warning";
-    case 2:
-      return "success";
-    case 3:
-      return "danger";
-    default:
-      break;
+import { usedraftChange } from '@/stores/draft_change';
+import { onActivated, onMounted, ref } from 'vue';
+import Table from "@/components/Table/Table.vue"
+import { addTesting, getChangeListByRole, updateChange } from '@/utils/api';
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/user';
+import { useTestStore } from '@/stores/test';
+import { dateFormat } from '@/utils/formatTimePlus';
+import { ElMessage, ElMessageBox } from 'element-plus';
+const {user} = storeToRefs(useUserStore()) 
+const draftChangeStore = usedraftChange()
+const { testList } = storeToRefs(useTestStore());
+const tableData = ref<any[]>([])
+const options=ref<any[]>([
+  {
+    prop: "id",
+    label: "编号",
+  },
+  {
+    prop:"initInter",
+    label:"原实习单位"
+  },
+  {
+    prop:"changeInter",
+    label:"新实习单位"
+  },
+  {
+    prop:"initPosition",
+    label:"原实习方向"
+  },
+  {
+    prop:"changePosition",
+    label:"新实习方向"
+  },
+  {
+    prop:"reason",
+    label:"变更原因"
+  }
+]) 
+const handleApplyClick = async (index: number, row: any) => {
+ const res =await updateChange(`/internship-change/${row.id}`,{
+    status:1
+  })
+  if(res.status===200){
+    const testres = await addTesting("/test", {
+          type_id: row.id,
+          test_type: "实习更改",
+          status: 1,
+        });
+        if(testres.status===200){
+          testList.value.push({
+            ...testres.data,
+            created_date:dateFormat(testres.data.created_date)
+          });
+        }
   }
 };
-const handleDelete = (index:number,row:any)=>{
-
+const handleDelete = ()=>{
+  ElMessageBox.confirm(
+    '您确定要删除这条记录吗?',
+    'Warning',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      ElMessage({
+        type: 'success',
+        message: 'Delete completed',
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Delete canceled',
+      })
+    })
 }
-const handleApplyClick = (index: number, row:any) => {
- 
-  
-};
-const isapply =(scope:any) =>{
-  switch (scope.row.operation) {
-    case 0:
-      return "申请";
-    case 1:
-      return "正在申请";
-    case 2:
-      return "申请成功";
-    case 3:
-      return "重新申请";
-    default:
-      break;
-  }
-}
-const satusChange = (scope: any) => {
-  switch (scope.row.apply_status) {
-    case 0:
-      return "待审核";
-    case 1:
-      return "审核中";
-    case 2:
-      return "审核成功";
-    case 3:
-      return "审核失败";
-    default:
-      break;
-  }
-};
-onDeactivated(()=>{
-  mitt.all.clear()
+onActivated(()=>{
+  tableData.value = draftChangeStore.draftChangeList
 })
-
+onMounted(async ()=>{
+ const res =await getChangeListByRole("/internship-change/byRole",{
+  isDraft:true,
+  userId:user.value?.id,
+  status:0
+})
+ const {status,data} = res
+ if(status === 200){
+  tableData.value = data
+  draftChangeStore.draftChangeList = tableData.value
+ }
+})
 </script>
     
 <style lang="less" scoped>

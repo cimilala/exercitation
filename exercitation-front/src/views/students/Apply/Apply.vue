@@ -3,13 +3,18 @@
     <div class="title">
       <span>我的实习申请</span>
     </div>
+    <div class="search">
+      <el-button :icon="Search" type="primary" @click="search">搜索</el-button>
+      <el-button :icon="RefreshLeft" type="info" @click="resetForm(ruleFormRef)"
+        >重置</el-button
+      >
+    </div>
 
     <el-form
       ref="ruleFormRef"
       :model="ruleForm"
       status-icon
       class="demo-ruleForm"
-      label-width="100px"
     >
       <el-form-item label="实习方向" prop="position">
         <el-input v-model="ruleForm.position" />
@@ -20,17 +25,7 @@
       <el-form-item label="实习位置" prop="place">
         <el-input v-model="ruleForm.place" />
       </el-form-item>
-      <el-form-item>
-        <el-button :icon="Search" type="primary" @click="search"
-          >搜索</el-button
-        >
-        <el-button
-          :icon="RefreshLeft"
-          type="info"
-          @click="resetForm(ruleFormRef)"
-          >重置</el-button
-        >
-      </el-form-item>
+
       <el-form-item label="人数是否满" prop="isFull">
         <el-select v-model="ruleForm.isFull" placeholder="Select">
           <el-option
@@ -42,115 +37,78 @@
         </el-select>
       </el-form-item>
     </el-form>
-
-    <div class="operation">
-      <el-button :icon="Plus" size="small">新增</el-button>
-      <el-button :icon="Edit" size="small">修改</el-button>
-      <el-button :icon="Delete" size="small">删除</el-button>
-      <el-button :icon="View" size="small">详情</el-button>
-      <el-button :icon="Upload" size="small"> Upload</el-button>
-       
-    </div>
-    <div class="table">
-      <el-table :data="filtableData" border style="width: 100%">
-        <el-table-column prop="id" label="编号" align="center" />
-        <el-table-column prop="position" label="实习方向" align="center" />
-        <el-table-column prop="place" label="实习位置" align="center" />
-        <el-table-column prop="startTime" label="开始时间" align="center" />
-        <el-table-column prop="endTime" label="结束时间" align="center" />
-        <el-table-column prop="teacher" label="指导老师" align="center" />
-        <el-table-column prop="type" label="实习类型" align="center" />
-        <el-table-column prop="totalNumber" label="限定人数" align="center" />
-        <el-table-column prop="currentNumber" label="当前人数" align="center" />
-        <el-table-column prop="apply_status" label="审核状态" align="center">
-          <template #default="scope">
-            <el-tag :type="typeChange(scope)"
-              ><span class="check">{{ satusChange(scope) }}</span>
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="opreation" label="操作" align="center">
-          <template #default="scope">
-            <el-button
-              link
-              type="primary"
-              size="small"
-              @click="handleApplyClick(scope.$index, scope.row)"
-              ><span class="isapply">{{ isapply(scope) }}</span></el-button
-            >
-            <el-button
-              link
-              type="primary"
-              size="small"
-              @click="handleApplyCancel(scope.$index, scope.row)"
-              >取消</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <Table
+      :table-data="filtableData"
+      :options="props"
+      :on-apply="handleApplyClick"
+      :on-cancel="handleCancelClick"
+      :apply="true"
+      :cancel="true"
+      :delete-show="false"
+      :editor="false"
+      :width="'180px'"
+    />
+   
   </div>
 </template>
 
 <script setup lang="ts">
 import {
-  Delete,
-  Plus,
-  View,
-  Edit,
-  Upload,
   Search,
   RefreshLeft,
 } from "@element-plus/icons-vue";
-import { updateUserStatus, IntershipList, getUserStatus } from "@/utils/api";
-import { onMounted, reactive, ref, toRaw } from "vue";
+import { updateUserStatus, IntershipList, getUserStatus, addTesting } from "@/utils/api";
+import { onMounted, reactive, ref } from "vue";
 import { useUserStore } from "@/stores/user";
-import type { FormInstance } from "element-plus";
+import {  ElMessageBox, ElNotification, type FormInstance } from "element-plus";
+import { storeToRefs } from "pinia";
+import { useTestStore } from "@/stores/test";
+import { dateFormat } from "@/utils/formatTimePlus";
+import { elMessage } from "@/utils/myElMessage";
 const store = useUserStore();
 let tableData = ref<Apply[]>([]);
 let filtableData = ref<Apply[]>([]);
-const apply_status = ref(0)
-const select_id = ref(0)
-const typeChange = (scope: any) => {
-  switch (scope.row.apply_status) {
-    case 1:
-      return "warning";
-    case 2:
-      return "success";
-    case 3:
-      return "danger";
-    default:
-      break;
-  }
-};
-const satusChange = (scope: any) => {
-  switch (scope.row.apply_status) {
-    case 0:
-      return "待审核";
-    case 1:
-      return "审核中";
-    case 2:
-      return "审核成功";
-    case 3:
-      return "审核失败";
-    default:
-      break;
-  }
-};
-const isapply = (scope: any) => {
-  switch (scope.row.operation) {
-    case 0:
-      return "申请";
-    case 1:
-      return "正在申请";
-    case 2:
-      return "申请成功";
-    case 3:
-      return "重新申请";
-    default:
-      break;
-  }
-};
+const props = ref<any[]>([
+  {
+    prop: "id",
+    label: "编号",
+  },
+  {
+    prop: "position",
+    label: "实习方向",
+  },
+  {
+    prop: "place",
+    label: "实习位置",
+  },
+  {
+    prop: "startTime",
+    label: "开始时间",
+  },
+  {
+    prop: "endTime",
+    label: "结束时间",
+  },
+  {
+    prop: "teacher",
+    label: "指导老师",
+  },
+  {
+    prop: "type",
+    label: "实习类型",
+  },
+  {
+    prop: "totalNumber",
+    label: "限定人数",
+  },
+  {
+    prop: "currentNumber",
+    label: "当前人数",
+  },
+]);
+const apply_status = ref(0);
+const select_id = ref(0);
+
 const options = [
   {
     value: "1",
@@ -178,7 +136,7 @@ const search = () => {
   });
   //根据筛选条件过滤数据
   filtableData.value = filterArray.reduce(
-    (pre,key) => {
+    (pre, key) => {
       return pre.filter((item) => {
         return item[key as enumApply] === ruleForm[key as keyType];
       });
@@ -201,49 +159,80 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
 };
-const handleApplyClick = (index: number, row: any) => {
+const handleApplyClick = async (index: number, row: any) => {
   const selectobj = tableData.value.find((item: any) => {
     return item.id === row.id;
   });
   if (selectobj) {
-    selectobj.apply_status = 1;
+    selectobj.status = 1;
     selectobj.operation = 1;
   }
-
+//修改状态
   updateUserStatus(`/stu_status/${store.user?.id}`, {
     apply_status: 1,
     select_id: row.id,
   });
+  //增加任务列表
+ const res =await addTesting("/testing",{
+  type_id:row.id,
+  test_type:'实习申请',
+  status:2
+
+})
+if(res.status===200){
+  const {testList} = storeToRefs(useTestStore())
+  testList.value.push({
+    ...res.data,
+    created_date:dateFormat(res.data.created_date)
+  })
+  ElNotification({
+    title: '申请成功',
+    message: "请到个人中心查看审核状态",
+    type: 'success',
+    showClose: false,
+  })
+
+
+}
 };
-const handleApplyCancel = (index: number, row: Apply) => {
-  const selectobj = tableData.value.find((item: any) => {
+
+const handleCancelClick = (index: number, row: Apply) => {
+  elMessage( '您确认要取消申请吗?',()=>{
+    const selectobj = tableData.value.find((item: any) => {
     return item.id === row.id;
   });
   if (selectobj) {
-    selectobj.apply_status = 0;
+    selectobj.status = 0;
     selectobj.operation = 0;
   }
   updateUserStatus(`/stu_status/${store.user?.id}`, {
     apply_status: 0,
     select_id: 0,
   });
+  })
 };
 
-onMounted(async ()=>{
-  const res = await getUserStatus("/stu_status/getOne",{userId:store.user?.id})
-  if(res.status===200){
-    select_id.value =  res.data.select_id
-    apply_status.value = res.data.apply_status
+onMounted(async () => {
+  const res = await getUserStatus("/stu_status/getOne", {
+    userId: store.user?.id,
+  });
+  if (res.status === 200) {
+    select_id.value = res.data.select_id;
+    apply_status.value = res.data.apply_status;
   }
-})
+});
 onMounted(async () => {
   const list = await IntershipList("/internshipapply");
   if (list.status === 200) {
     tableData.value = list.data.map((item: Apply) => {
       if (item.id === select_id.value) {
-        return { ...item, apply_status:apply_status.value, operation: apply_status.value };
+        return {
+          ...item,
+          status: apply_status.value,
+          operation: apply_status.value,
+        };
       } else {
-        return { ...item, apply_status: 0, operation: 0 };
+        return { ...item, status: 0, operation: 0 };
       }
     }) as Apply[];
     filtableData.value = tableData.value;
@@ -263,7 +252,10 @@ onMounted(async () => {
       font-size: 25px;
     }
   }
-
+  .search {
+    display: flex;
+    justify-content: flex-end;
+  }
   .demo-ruleForm {
     display: flex;
     flex-wrap: wrap;

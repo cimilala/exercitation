@@ -9,13 +9,10 @@
           <div>{{ user?.username }}</div>
           <div class="header_info">
             <div>
-              <el-icon :size="20">
-                <Location /> </el-icon
-              ><span>湖北商贸</span>
+              <el-icon :size="20"> <Location /> </el-icon><span>湖北商贸</span>
             </div>
             <div>
-              <el-icon :size="20">
-                <ChatDotRound /> </el-icon
+              <el-icon :size="20"> <ChatDotRound /> </el-icon
               ><span>1746593891</span>
             </div>
             <div>
@@ -60,11 +57,18 @@
       </div>
 
       <div class="person_right">
-        <Echarts :option="option" style="width: 100%; height: 100%" />
+        <echarts :option="option" style="width: 100%; height: 100%" />
       </div>
     </div>
     <div class="context">
-      <div><span>正在进行的任务</span></div>
+      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+        <el-tab-pane label="正在进行的任务" name="first">
+          <Testing />
+        </el-tab-pane>
+        <el-tab-pane label="已经完成的任务" name="second">
+          <Tested />
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
@@ -79,11 +83,20 @@ import {
   Phone,
   Location,
 } from "@element-plus/icons-vue";
-import Echarts from "@/components/Echarts/Echarts.vue";
+import echarts from "@/components/Echarts/Echarts.vue";
+import Testing from "@/components/Testing/Testing.vue";
+import Tested from "@/components/Tested/Tested.vue";
+import type { TabsPaneContext } from "element-plus";
+
 const textarea = ref("");
 const url = ref("");
 const store = useUserStore();
 const { user } = storeToRefs(store);
+const activeName = ref("first");
+
+const handleClick = (tab: TabsPaneContext, event: Event) => {
+  // console.log(tab, event)
+};
 const option = ref({
   title: {
     text: "课外时间分配",
@@ -119,7 +132,6 @@ const option = ref({
     },
   ],
 });
-
 watch(
   user,
   () => {
@@ -182,6 +194,12 @@ watch(
   width: 100%;
   height: 500px;
   margin-top: 30px;
-  background-color: deepskyblue;
+  // background-color: deepskyblue;
+}
+.demo-tabs > .el-tabs__content {
+  padding: 32px;
+  color: #6b778c;
+  font-size: 32px;
+  font-weight: 600;
 }
 </style>

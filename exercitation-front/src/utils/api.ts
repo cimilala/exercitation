@@ -17,3 +17,29 @@ export const getUserStatus = (url:string,params:any)=> http.post<StuStatus>(url,
 export const getMenuList = (url:string,params:any)=>http.post(url,params)
 //获取角色名
 export const getRole = (url:string)=>http.get(url)
+//获取用户日报信息
+export const getDayNewsListByRole = (url:string,params:unknown)=>http.post(url,params)
+//新增日报
+export const addNews = (url:string,params:any)=>http.post(url,params)
+//修改日报
+ export const updateDayNews = (url:string,params:unknown)=>http.patch(url,params)
+//新增实习变更
+export const addChange=(url:string,params:any)=>http.post(url,params)
+//获取用户实习变更列表
+export const getChangeListByRole = (url:string,params:any)=>http.post(url,params)
+//修改实习变更列表
+export const updateChange = (url:string,params:unknown)=>http.patch(url,params)
+//新增一个请假
+export const addLeave = (url:string,params:unknown)=>http.post(url,params)
+//获取用户实习请假列表
+export const getLeaveListByRole = (url:string,params:unknown)=>http.post(url,params)
+//修改请假列表
+export const updateLeave = (url:string,params:unknown)=>http.patch(url,params)
+//新增一个任务列表
+export const addTesting = (url:string,params:unknown)=>http.post(url,params)
+//获取所有任务列表
+export const getTestingAllList = (url:string)=>http.get(url)
+//获取正在进行的任务列表
+export const getTestingList = (url:string)=>http.get(url)
+//获取已经完成的任务列表
+export const getTestedList = (url:string)=>http.get(url)

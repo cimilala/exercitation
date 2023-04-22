@@ -1,96 +1,137 @@
 <template>
-    <div class="table">
-  <el-table :data="filtableData" border style="width: 100%">
-    <el-table-column prop="id" label="编号" align="center" />
-    <el-table-column prop="position" label="实习方向" align="center" />
-    <el-table-column prop="place" label="实习位置" align="center" />
-    <el-table-column prop="startTime" label="开始时间" align="center" />
-    <el-table-column prop="endTime" label="结束时间" align="center" />
-    <el-table-column prop="teacher" label="指导老师" align="center" />
-    <el-table-column prop="type" label="实习类型" align="center" />
-    <el-table-column prop="totalNumber" label="限定人数" align="center" />
-    <el-table-column prop="currentNumber" label="当前人数" align="center" />
-    <el-table-column prop="apply_status" label="审核状态" align="center">
-      <template #default="scope">
-        <el-tag :type="typeChange(scope)"
-          ><span >{{ satusChange(scope) }}</span>
-        </el-tag>
-      </template>
-    </el-table-column>
-    <el-table-column prop="opreation" label="操作" align="center">
-      <template #default="scope">
-        <el-button
-          link
-          type="primary"
-          size="small"
-          @click="handleApplyClick(scope.$index, scope.row)"
-          ><span class="isapply">{{ isapply(scope) }}</span></el-button
-        >
-        <el-button
-          link
-          type="primary"
-          size="small"
-          @click="handleDelete(scope.$index, scope.row)"
-          >删除</el-button
-        >
-      </template>
-    </el-table-column>
-  </el-table>
-</div>
+  <Table
+    :table-data="tableData"
+    :options="options"
+  :on-apply="handleApplyClick"
+  :on-cancel="handleApplyCancel"
+  :on-delete="handleDelete"
+  :apply="true"
+    :cancel="false"
+    :delete-show="true"
+    :editor="true"
+    :width="'220px'"
+  >
+    <template v-slot:detail>
+      <el-table-column property="content" label="内容" align="center">
+        <template #default="scope">
+          <el-button link type="primary" @click="content(scope.row)"
+            >详情</el-button
+          >
+        </template>
+      </el-table-column>
+    </template>
+  </Table>
+  <el-dialog v-model="dialogTableVisible" title="日报内容">
+    <el-input
+      v-model="textarea"
+      :rows="18"
+      type="textarea"
+      placeholder="Please input"
+  /></el-dialog>
 </template>
 
-<script setup lang='ts'>import { ref } from 'vue';
+<script setup lang="ts">
+import { onActivated, onMounted, ref } from "vue";
+import Table from "@/components/Table/Table.vue";
+import { addTesting, getDayNewsListByRole, updateDayNews } from "@/utils/api";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user";
+import { usedraftNews } from "@/stores/draft_news";
+import { dateFormat } from "@/utils/formatTimePlus";
+import { useTestStore } from "@/stores/test";
+import { ElMessage, ElMessageBox } from "element-plus";
+const { user } = storeToRefs(useUserStore());
+const { testList } = storeToRefs(useTestStore());
+const {draftNewsList} =storeToRefs(usedraftNews()) 
+const tableData = ref<any[]>([]);
+const dialogTableVisible = ref(false);
+const textarea = ref("");
+const options = ref<any[]>([
+  {
+    prop: "id",
+    label: "编号",
+  },
 
-const typeChange = (scope: any) => {
-switch (scope.row.apply_status) {
-case 1:
-  return "warning";
-case 2:
-  return "success";
-case 3:
-  return "danger";
-default:
-  break;
-}
+  {
+    prop: "title",
+    label: "标题",
+  },
+  {
+    prop: "unit",
+    label: "实习单位",
+  },
+  {
+    prop: "time",
+    label: "日期",
+  },
+  {
+    prop: "week",
+    label: "周次",
+  },
+]);
+const content = (row: any) => {
+  dialogTableVisible.value = true;
+  textarea.value = row.content;
 };
-const handleDelete = (index:number,row:any)=>{
-
+const handleApplyClick = async (index: number, row: any) => {
+  const res =await updateDayNews(`/day-news/${row.id}`,{
+    status:1
+  })
+  if(res.status===200){
+    const testres = await addTesting("/test", {
+          type_id: row.id,
+          test_type: "实习日报",
+          status: 1,
+        });
+        if(testres.status===200){
+          testList.value.push({
+            ...testres.data,
+            created_date:dateFormat(testres.data.created_date)
+          });
+        }
+  }
+};
+const handleDelete = ()=>{
+  ElMessageBox.confirm(
+    '您确定要删除这条记录吗?',
+    'Warning',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      ElMessage({
+        type: 'success',
+        message: 'Delete completed',
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Delete canceled',
+      })
+    })
 }
-const handleApplyClick = (index: number, row:any) => {
-
+const handleApplyCancel = (index: number, row: Apply) => {
 
 };
-const isapply =(scope:any) =>{
-switch (scope.row.operation) {
-case 0:
-  return "申请";
-case 1:
-  return "正在申请";
-case 2:
-  return "申请成功";
-case 3:
-  return "重新申请";
-default:
-  break;
-}
-}
-const satusChange = (scope: any) => {
-switch (scope.row.apply_status) {
-case 0:
-  return "待审核";
-case 1:
-  return "审核中";
-case 2:
-  return "审核成功";
-case 3:
-  return "审核失败";
-default:
-  break;
-}
-};
-const filtableData = ref([])
+onActivated(() => {
+  tableData.value =draftNewsList.value;
+});
+onMounted(async () => {
+  const res = await getDayNewsListByRole("/day-news/byRole", {
+    isDraft: true,
+    userId: user.value?.id,
+    status:0
+  });
+  const { status, data } = res;
+  if (status === 200) {
+    tableData.value = data;
+    draftNewsList.value= tableData.value;
+  }
+});
 </script>
 
-<style lang="less" scoped>
-  
-</style>
+<style lang="less" scoped></style>

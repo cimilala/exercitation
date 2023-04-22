@@ -1,14 +1,4 @@
 <script setup lang="ts">
-// import {  onMounted,  } from "vue";
-// import { useUserStore } from "./stores/user";
-// import {useMenuStore} from "./stores/menu"
-// const userstore = useUserStore()
-// const menuStore= useMenuStore()
-// onMounted(()=>{
-//   userstore.saveUser()
-//   menuStore.saveMenuList()
-// })
-  
 </script>
 
 <template>

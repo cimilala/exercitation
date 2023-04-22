@@ -33,7 +33,7 @@ const handleClick = (tag: string) => {
   Object.keys(menuMap).forEach((item) => {
     if (menuMap[item] == tag) {
       router.push({
-        path: `/main${item}`,
+        path: `${item}`,
         query:{
           title:tag
         }

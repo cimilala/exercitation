@@ -8,6 +8,8 @@ export class CreateMenuDto {
     path:string
     @IsString()
     icon:string
+    @IsString()
+    index:string
     @IsNumber()
     parent_id:number
 }

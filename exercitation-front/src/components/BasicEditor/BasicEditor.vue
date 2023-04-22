@@ -27,9 +27,6 @@ const editorRef = shallowRef();
 
 // 内容 HTML
 const valueHtml = ref('<p>hello</p>');
-defineExpose({
-  valueHtml:valueHtml
-})
 // 模拟 ajax 异步获取内容
 onMounted(() => {
   // setTimeout(() => {

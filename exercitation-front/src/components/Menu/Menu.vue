@@ -1,4 +1,10 @@
 <template>
+  <div class="main-menu">
+    <div class="logo">
+      <!-- <img src="" alt="">
+      <span class="title">xxx后台管理系统</span> -->
+    </div>
+  </div>
   <div class="side">
     <el-menu
       :default-active="active"
@@ -15,18 +21,15 @@
     </el-menu>
   </div>
 </template>
-
 <script setup lang="ts">
 import {  ref } from "vue";
 import { useRouter } from "vue-router";
 import menuMap from "@/utils/localmenuMap";
 import { useMenuStore } from "@/stores/menu";
-import { useUserStore } from "@/stores/user";
-const userStore = useUserStore();
 const router = useRouter();
 const menuList = ref([]);
 const menuStore = useMenuStore()
-const active = ref("home");
+const active = ref("/home");
 
 //菜单栏伸缩
 defineProps<{
@@ -47,15 +50,20 @@ const handleClose = (key: string, keyPath: string[]) => {
 const handleSelect = (key: string, keyPath: string[]) => {
   const str = { title: menuMap[key] };
   router.push({
-    path: `/main${key}`,
+    path: `${key}`,
     query: str,
   });
 };
+
 menuList.value = menuStore.formatMenuList.value
 </script>
 
 <style scoped>
 .side {
   height: 100%;
+}
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+ 
 }
 </style>

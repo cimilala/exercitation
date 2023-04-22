@@ -1,9 +1,9 @@
 <template>
-  <div class="grade">
+  <div class="grade" v-if="absentShow">
     <div class="header">
       <div class="left">
         <img :src="url" alt="" />
-        <strong style="font-weight: bold">{{ name }}</strong>
+        <strong style="font-weight: bold">{{ user?.name }}</strong>
       </div>
       <div class="right">
         <span style="font-size: 30px"
@@ -236,28 +236,37 @@
 
    
   </div>
+  <RouterView v-else></RouterView>
 </template>
 
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
-import { onMounted, reactive, ref, toRefs } from "vue";
+import { onActivated, onMounted, reactive, ref, toRefs } from "vue";
 import { ArrowRight } from "@element-plus/icons-vue";
 import {useRouter} from "vue-router"
+import { storeToRefs } from "pinia";
 
 
 const percentage = ref(24)
 const userStore = useUserStore();
-const { name, photo } = toRefs(userStore.user);
-const url = ref(`http://localhost:3000/images/${photo.value}.jpg`);
+const { user} = storeToRefs(userStore);
+const url = ref(`http://localhost:3000/images/${user.value?.photo}.jpg`);
 const router = useRouter()
+const absentShow= ref(true)
 const goAbsentInfo = ()=>{
-  router.push({path:"/grade_absent",query:{title:"出勤信息"}})
+  absentShow.value = false
+  router.push({path:"/main/grade/grade_absent"})
 }
 const goDayNews=()=> {
-router.push({path:"/dayNews",query:{title:"实习日报"}})
+router.push({path:"/main/grade/dayNews",query:{title:"实习日报"}})
 }
 onMounted(()=>{
   //获取该学生的请假，缺勤的日期
+})
+onActivated(()=>{
+  console.log("absentShow");
+  
+  absentShow.value =true
 })
 </script>
 <style lang="less" scoped>

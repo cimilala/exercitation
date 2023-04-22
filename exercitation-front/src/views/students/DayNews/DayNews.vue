@@ -1,50 +1,155 @@
 <template>
-  <div class="daynews">
+  <div class="main">
     <div class="title">
       <span>我的实习日报</span>
     </div>
+    <div class="daynews" v-if="isShow">
+      <div class="search">
+      <el-button :icon="Search" type="primary" @click="search"
+          >搜索</el-button
+        >
+        <el-button
+          :icon="RefreshLeft"
+          type="info"
+          @click="resetForm(ruleFormRef)"
+          >重置</el-button
+        >
+    </div>
+    <el-form
+      ref="ruleFormRef"
+      :model="ruleForm"
+      status-icon
+      class="demo-ruleForm"
+     
+    >
+    <el-form-item label="日期" prop="time">
+        <el-input v-model="ruleForm.time" />
+      </el-form-item>
+      <el-form-item label="标题" prop="title">
+        <el-input v-model="ruleForm.title" />
+      </el-form-item>
+      <el-form-item label="周次" prop="week">
+        <el-input v-model="ruleForm.week" />
+      </el-form-item>
+    </el-form>
+    <Table
+    :table-data="tableData"
+    :options="options"
+    :add="addDayNews"
+    :apply="false"
+    :cancel="false"
+    :delete-show="true"
+    :editor="false"
+    :on-delete="handleDelete"
 
-    <div class="operation">
-      <el-button :icon="Plus" size="small" @click="addNews">新增</el-button>
-      <el-button :icon="Edit" size="small">修改</el-button>
-      <el-button :icon="Delete" size="small">删除</el-button>
-      <el-button :icon="View" size="small">详情</el-button>
+    >
+    <template v-slot:detail>
+      <el-table-column property="content" label="内容" align="center">
+          <template #default="scope">
+            <el-button link type="primary" @click="content(scope.row)"
+              >详情</el-button
+            >
+          </template>
+        </el-table-column>
+    </template>
     
+  </Table>
     </div>
-    <div class="table">
-      <el-table :data="tableData" border style="width: 100%">
-        <el-table-column prop="id" label="编号" align="center" />
-        <el-table-column prop="position" label="实习方向" align="center" />
-        <el-table-column prop="place" label="实习位置" align="center" />
-        <el-table-column prop="startTime" label="开始时间" align="center" />
-        <el-table-column prop="endTime" label="结束时间" align="center" />
-        <el-table-column prop="teacher" label="指导老师" align="center" />
-        <el-table-column prop="type" label="实习类型" align="center" />
-        <el-table-column prop="totalNumber" label="限定人数" align="center" />
-        <el-table-column prop="currentNumber" label="当前人数" align="center" />
-      </el-table>
+    <div class="router" v-else >
+      <router-view v-slot="{Component}">
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
     </div>
+    
+
+    
+   
+   
+   
   </div>
+  <el-dialog v-model="dialogTableVisible" title="日报内容">
+    <el-input
+      v-model="textarea"
+      :rows="18"
+      type="textarea"
+      placeholder="Please input"
+  /></el-dialog>
 </template>
 
 <script setup lang="ts">
-import { Delete, Plus, View, Edit, Upload } from "@element-plus/icons-vue";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-let tableData = ref([]);
-const router = useRouter();
-const addNews = () => {
-  router.push({
-    path: "/addNews",
-    query: {
-      title: "新增日报",
-    },
-  });
+import { onActivated, onMounted, reactive, ref } from "vue";
+import router from "@/router";
+import { Search, RefreshLeft } from "@element-plus/icons-vue";
+import {  getDayNewsListByRole } from "@/utils/api";
+import { elMessage } from "@/utils/myElMessage";
+import type { FormInstance } from "element-plus";
+const tableData = ref<any[]>([]);
+const isShow = ref(true)
+const options = ref<any[]>([
+  {
+    prop:"id",
+    label:"编号"
+  },
+
+  {
+    prop: "title",
+    label: "标题",
+  },
+  {
+    prop: "unit",
+    label: "实习单位",
+  },
+  {
+    prop: "time",
+    label: "日期",
+  },
+  {
+    prop: "week",
+    label: "周次",
+  },
+]);
+const textarea = ref("");
+const ruleForm = reactive({
+  week: "",
+  time: "",
+  title:""
+});
+const dialogTableVisible = ref(false);
+const content = (row: any) => {
+  dialogTableVisible.value = true;
+  textarea.value = row.content;
 };
+const search = () => {};
+const ruleFormRef = ref<FormInstance>();
+const addDayNews = () => {
+  isShow.value = false
+  router.push({ path: "/dayNews/addNews"});
+};
+const handleDelete = ()=>{
+  elMessage('您确定要删除这条记录吗?')
+}
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.resetFields();
+};
+onMounted(async ()=>{
+     const res=  await getDayNewsListByRole("/day-news/byRole",{status:2})
+    const {status,data} = res
+    if(status === 200){
+      tableData.value = data
+    }
+     
+})
+onActivated(()=>{
+  
+  isShow.value=true
+})
 </script>
 
 <style scoped>
-.daynews {
+.main {
   width: 100%;
 }
 .title {
@@ -56,14 +161,16 @@ const addNews = () => {
   font-weight: 900;
   font-size: 25px;
 }
-
-.operation {
-  padding-left: 10px;
-}
-
 .table {
-  padding-left: 10px;
-  padding-right: 10px;
   margin-top: 20px;
+}
+.demo-ruleForm {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.search{
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

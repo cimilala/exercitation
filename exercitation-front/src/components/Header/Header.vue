@@ -61,7 +61,7 @@ const updatePassword = ()=>{
 }
 const exit = ()=>{
   localStorage.clear()
-  router.push({name:"login"})
+  router.replace({path:"/login"})
 }
 const personCenter = () =>{
   router.push({path:"/main/person_center",query:{title:"个人中心"}})

@@ -12,5 +12,8 @@ export class Menu {
     @Column()
     icon:string
     @Column()
+    index:string
+    @Column()
     parent_id:number
+    
 }

@@ -11,6 +11,10 @@ import { StuInfoModule } from './stu_info/stu_info.module';
 import { MenuModule } from './menu/menu.module';
 import { RoleMenuModule } from './role_menu/role_menu.module';
 import { UserModule } from './user/user.module';
+import { DayNewsModule } from './day-news/day-news.module';
+import { InternshipChangeModule } from './internship-change/internship-change.module';
+import { InternshipLeaveModule } from './internship-leave/internship-leave.module';
+import { TestModule } from './test/test.module';
 @Module({
   imports: [
     AuthModule,
@@ -33,7 +37,11 @@ import { UserModule } from './user/user.module';
     RoleModule,
     StuInfoModule,
     MenuModule,
-    UserModule
+    UserModule,
+    DayNewsModule,
+    InternshipChangeModule,
+    InternshipLeaveModule,
+    TestModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,12 +1,11 @@
 <template>
          <template v-for="item in menuList" :key="item.id">
         <template v-if="item.children!==null">
-          <el-sub-menu :index="item.path">
+          <el-sub-menu :index="item.index">
             <template #title>
-              <i
-                :class="item.icon"
-                style="font-size: 25px"
-              ></i>
+              <el-icon >
+                <component :is="'Delete'"/>
+              </el-icon>
               <span>{{ item.name }}</span>
             </template>
             <template
@@ -19,11 +18,9 @@
               </template>
               <template v-else>
                 <el-menu-item :index="childrenItem.path">
-                  <i
-                    :class="childrenItem.icon"
-                    style="font-size: 25px"
-                  ></i>
-
+                  <el-icon>
+                <component :is="item.icon"/>
+              </el-icon>
                   <template #title>{{ childrenItem.name }}</template>
                 </el-menu-item>
               </template>
@@ -32,11 +29,9 @@
         </template>
         <template v-else>
           <el-menu-item :index="item.path">
-            <i
-              :class="item.icon"
-              style="font-size: 25px"
-            ></i>
-
+            <el-icon>
+                <component :is="item.icon"/>
+              </el-icon>
             <template #title>{{ item.name }}</template>
           </el-menu-item>
         </template>
@@ -44,6 +39,7 @@
 </template>
     
 <script setup lang='ts'>
+
     defineProps<{
   menuList:any[]
 }>()

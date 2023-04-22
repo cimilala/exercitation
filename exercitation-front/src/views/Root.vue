@@ -8,15 +8,12 @@ const isCollapse  = ref(false);
 const changespan = (value: boolean) => {
   isCollapse.value = value
 };
-
 </script>
- 
 <template>
  <div class="common-layout">
     <el-container class="container">
        <!-- 侧边栏 -->
-      <el-aside :width="isCollapse ? '60px':'210px'" style="background-color:#545c64"> 
-        <div style="height: 40px;">实习管理系统</div>
+      <el-aside  style="background-color:#545c64;" :width="isCollapse ? '60px':'200px'"> 
          <Menu :isCollapse="isCollapse"></Menu>
         </el-aside>
           <!-- 右边部分 -->

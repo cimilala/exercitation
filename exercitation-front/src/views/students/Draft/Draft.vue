@@ -3,41 +3,34 @@
     <div class="title">
       <span>草稿箱</span>
     </div>
-
-    <div class="operation">
-      <el-button :icon="Plus" size="small">新增</el-button>
-      <el-button :icon="Edit" size="small">修改</el-button>
-      <el-button :icon="Delete" size="small">删除</el-button>
-      <el-button :icon="View" size="small">详情</el-button>
-      <el-button size="small">
-        Upload<el-icon class="el-icon--right">
-        
-        </el-icon>
-      </el-button>
-    </div>
-    <div style="display: flex; justify-content: space-evenly">
-      <RouterLink to="/main/draft/draft_change">实习变更</RouterLink>
-      <RouterLink to="/main/draft/draft_leave">请假申请</RouterLink>
-      <RouterLink to="/main/draft/draft_news">实习日报</RouterLink>
-      <RouterLink to="/main/draft/draft_summary">实习总结</RouterLink>
-    </div>
-
-    <RouterView></RouterView>
+    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+    <el-tab-pane label="实习变更" name="first">
+      <DChange></DChange>
+    </el-tab-pane>
+    <el-tab-pane label="请假申请" name="second">
+      <DLeave/>
+    </el-tab-pane>
+    <el-tab-pane label="实习日报" name="third">
+      <Dnews/>
+    </el-tab-pane>
+    
+  </el-tabs>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Delete, Plus, View, Edit, Upload } from "@element-plus/icons-vue";
+import DChange from "@/views/students/Draft/DChange/DChange.vue"
+import DLeave from "@/views/students/Draft/DLeave/DLeave.vue"
+import Dnews from "@/views/students/Draft/Dnews/Dnews.vue"
 
-import { useRouter } from "vue-router";
+import type { TabsPaneContext } from 'element-plus';
+import { ref } from 'vue';
 
-const router = useRouter();
+const activeName = ref('first')
 
-const qsq = () => {
-  router.push({
-    name: "draft_change",
-  });
-};
+const handleClick = (tab: TabsPaneContext, event: Event) => {
+  console.log(tab, event)
+}
 </script>
 <style lang="less" scoped>
   .draft {
@@ -49,6 +42,12 @@ const qsq = () => {
     font-weight: 900;
   font-size: 25px;
   }
+  .demo-tabs > .el-tabs__content {
+  padding: 32px;
+  color: #6b778c;
+  font-size: 32px;
+  font-weight: 600;
+}
 }
 }
 </style>
