@@ -5,19 +5,16 @@ import './assets/main.css'
 import "./assets/iconfont/font/iconfont.css"
 // import 'default-passive-events'
 import { createPinia } from 'pinia'
-import { useUserStore } from "./stores/user";
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import icons from "./utils/icons"
+import getDate from './utils/getDate'
 const pinia = createPinia()
 const app = createApp(App)
-const token = localStorage.getItem("token")
 app.use(pinia)
-const userstore = useUserStore()
-if(token){
-  userstore.saveUser()
-}
+//页面刷新重新获取数据
+app.use(getDate)
+//全局注册icon组件
+app.use(icons)
 app.use(router)
 app.mount("#app")
-// 注册全局组件
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  app.component(key, component)
-}
+
+

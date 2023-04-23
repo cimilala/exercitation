@@ -65,6 +65,7 @@ import { storeToRefs } from "pinia";
 import { useTestStore } from "@/stores/test";
 import { dateFormat } from "@/utils/formatTimePlus";
 import { elMessage } from "@/utils/myElMessage";
+import Table from "@/components/Table/Table.vue";
 const store = useUserStore();
 let tableData = ref<Apply[]>([]);
 let filtableData = ref<Apply[]>([]);

@@ -104,6 +104,7 @@ import { elMessage } from "@/utils/myElMessage";
 import type { FormInstance, UploadUserFile } from "element-plus";
 import { tableSearch } from "@/utils/tableSerach";
 import formateTime from "@/utils/formatTime";
+import Table from "@/components/Table/Table.vue";
 const tableData = ref<any[]>([]);
 const isShow = ref(true);
 const fileList = ref<UploadUserFile[]>([]);

@@ -86,6 +86,7 @@ import {  getDayNewsListByRole } from "@/utils/api";
 import { elMessage } from "@/utils/myElMessage";
 import type { FormInstance } from "element-plus";
 import { tableSearch } from "@/utils/tableSerach";
+import Table from "@/components/Table/Table.vue";
 const tableData = ref<any[]>([]);
 const filtableData = ref<Apply[]>([]);
 const isShow = ref(true)

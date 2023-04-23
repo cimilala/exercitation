@@ -1,4 +1,6 @@
+import { useMenuStore } from "@/stores/menu";
 import { createRouter, createWebHistory } from "vue-router";
+
 const routes = [
   {
     path: "/",
@@ -18,15 +20,12 @@ const routes = [
     path: "/:catchAll(.*)",
     redirect: "/notfound",
   },
-  {
-    path: "/",
-    redirect: "/home",
-  },
 ];
 const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
 router.beforeEach((to, from, next) => {
   if (
     // 检查用户是否已登录
@@ -37,7 +36,12 @@ router.beforeEach((to, from, next) => {
     // 将用户重定向到登录页面
     next({ name: "login" });
   } else {
-    next();
+    if(to.name==="/"){
+      next({ name: "home" });
+    }else {
+      next();
+    }
+   
   }
 });
 export default router;

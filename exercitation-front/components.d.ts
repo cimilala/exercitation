@@ -9,10 +9,9 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    BasicEditor: typeof import('./src/components/BasicEditor/BasicEditor.vue')['default']
-    Dialog: typeof import('./src/components/Dialog/Dialog.vue')['default']
-    Echarts: typeof import('./src/components/Echarts/Echarts.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
+    ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
+    ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCalendar: typeof import('element-plus/es')['ElCalendar']
     ElCol: typeof import('element-plus/es')['ElCol']
@@ -50,19 +49,7 @@ declare module '@vue/runtime-core' {
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElUpload: typeof import('element-plus/es')['ElUpload']
-    Header: typeof import('./src/components/Header/Header.vue')['default']
-    Login: typeof import('./src/components/Login/Login.vue')['default']
-    Menu: typeof import('./src/components/Menu/Menu.vue')['default']
-    MenuItem: typeof import('./src/components/MenuItem/MenuItem.vue')['default']
-    MyElMessage: typeof import('./src/components/MyElMessage/MyElMessage.vue')['default']
-    Navbar: typeof import('./src/components/Navbar/Navbar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Sidebar: typeof import('./src/components/SideBar/Sidebar.vue')['default']
-    Table: typeof import('./src/components/Table/Table.vue')['default']
-    Test: typeof import('./src/components/common/Menu/Test.vue')['default']
-    Tested: typeof import('./src/components/Tested/Tested.vue')['default']
-    Testing: typeof import('./src/components/Testing/Testing.vue')['default']
-    Upload: typeof import('./src/components/Upload/Upload.vue')['default']
   }
 }

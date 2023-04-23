@@ -23,14 +23,15 @@
 </template>
 <script setup lang="ts">
 import {  ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import menuMap from "@/utils/localmenuMap";
 import { useMenuStore } from "@/stores/menu";
+import MenuItem from "../MenuItem/MenuItem.vue";
 const router = useRouter();
 const menuList = ref([]);
 const menuStore = useMenuStore()
-const active = ref("/home");
-
+const route = useRoute()
+const active = ref(route.path);
 //菜单栏伸缩
 defineProps<{
   isCollapse:boolean

@@ -81,6 +81,7 @@ import { elMessage } from "@/utils/myElMessage";
 import type { FormInstance } from "element-plus";
 import { tableSearch } from "@/utils/tableSerach";
 import { useRoute } from "vue-router";
+import Table from "@/components/Table/Table.vue";
 const Route = useRoute()
 const tableData = ref<any[]>([]);
 const filtableData = ref<Apply[]>([]);

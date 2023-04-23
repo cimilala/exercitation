@@ -7,7 +7,7 @@
               <Fold v-else/>
             </el-icon>
           </el-button>
-          <span>首页</span>
+          <MyBreadcrumb/>
         </div>
         <div class="right">
           <el-dropdown>
@@ -15,7 +15,7 @@
      
       <img :src="url"  alt=""  >
      
-     <span style="margin-left:15px;">嗨,{{ user_info?.username}}</span>
+     <span style="margin-left:15px;">嗨,{{ user?.username}}</span>
       <el-icon class="el-icon--right">
         <arrow-down />
       </el-icon>
@@ -39,6 +39,7 @@
 <script setup lang='ts'>import {  ref, watch, type Ref} from 'vue';
 import mitt from "@/utils/mitt"
 import Dialog from '../Dialog/Dialog.vue';
+import MyBreadcrumb from '../MyBreadcrumb/MyBreadcrumb.vue';
 import {
   Expand,ArrowDown,Fold,
 } from "@element-plus/icons-vue";
@@ -47,6 +48,7 @@ import { storeToRefs } from 'pinia';
 import 'element-plus/es/components/message/style/css'
 import 'element-plus/es/components/message-box/style/css'
 import { useUserInfo } from '@/stores/user_info';
+import { useUserStore } from '@/stores/user';
 
 
     //控制左边菜单栏的伸缩
@@ -66,6 +68,7 @@ const personCenter = () =>{
   router.push({path:"/main/person_center",query:{title:"个人中心"}})
 }
 
+const {user} = storeToRefs(useUserStore())
 const {user_info} = storeToRefs(useUserInfo())
 const url = ref("")
 watch(user_info,()=>{
