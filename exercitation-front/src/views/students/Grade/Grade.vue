@@ -3,7 +3,7 @@
     <div class="header">
       <div class="left">
         <img :src="url" alt="" />
-        <strong style="font-weight: bold">{{ user?.name }}</strong>
+        <strong style="font-weight: bold">{{ user_info?.name }}</strong>
       </div>
       <div class="right">
         <span style="font-size: 30px"
@@ -218,21 +218,7 @@
       </div>
     </div>
 
-    <div>
-      实习表现评分：实习单位和实习管理方面对学生在实习期间的工作表现、职业素养、工作态度、团队协作等方面进行评分
-    </div>
-    <div>
-      实习成果评分：实习单位和实习管理方面对学生在实习期间完成的工作、项目或任务进行评分
-    </div>
-    <div>
-      实习总评分：实习单位和实习管理方面对学生的实习表现和实习成果进行综合评价，给出实习总评分
-    </div>
-    <div>
-      实习成绩排名：根据学生的实习总评分进行排名，给出学生在实习班级中的名次
-    </div>
-    <div>
-      实习证明和证书：对于表现优秀的学生，实习单位和实习管理方面可以发放实习证明和证书，以证明学生在实习期间的表现和成绩。
-    </div>
+   
 
    
   </div>
@@ -245,20 +231,20 @@ import { onActivated, onMounted, reactive, ref, toRefs } from "vue";
 import { ArrowRight } from "@element-plus/icons-vue";
 import {useRouter} from "vue-router"
 import { storeToRefs } from "pinia";
+import { useUserInfo } from "@/stores/user_info";
 
 
 const percentage = ref(24)
-const userStore = useUserStore();
-const { user} = storeToRefs(userStore);
-const url = ref(`http://localhost:3000/images/${user.value?.photo}.jpg`);
+const {user_info} = storeToRefs(useUserInfo())
+const url = ref(`http://localhost:3000/images/${user_info.value?.photo}`);
 const router = useRouter()
 const absentShow= ref(true)
 const goAbsentInfo = ()=>{
   absentShow.value = false
-  router.push({path:"/main/grade/grade_absent"})
+  router.push({path:"/grade/grade_absent"})
 }
 const goDayNews=()=> {
-router.push({path:"/main/grade/dayNews",query:{title:"实习日报"}})
+router.push({path:"/grade/dayNews",query:{title:"实习日报"}})
 }
 onMounted(()=>{
   //获取该学生的请假，缺勤的日期

@@ -29,4 +29,10 @@ export class StuInfoService {
   remove(id: number) {
     return this.stuInfoReposeitory.delete(id);
   }
+  find(entityLike:UpdateStuInfoDto){
+    return this.stuInfoReposeitory.find({where:entityLike})
+  }
+  findOneByUserId(entityLike:UpdateStuInfoDto){
+    return this.stuInfoReposeitory.findOneBy(entityLike)
+  }
 }

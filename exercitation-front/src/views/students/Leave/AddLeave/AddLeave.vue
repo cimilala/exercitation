@@ -33,6 +33,8 @@
           v-model="ruleForm.start_time"
           type="date"
           placeholder="Pick a day"
+          :disabled-date="disabledDate"
+          :size="size"
         />
       </el-form-item>
       <el-form-item label="结束时间" prop="end_time">
@@ -40,6 +42,8 @@
           v-model="ruleForm.end_time"
           type="date"
           placeholder="Pick a day"
+          :disabled-date="disabledDate"
+          :size="size"
         />
       </el-form-item>
       <el-form-item label="请假天数" prop="days">
@@ -73,12 +77,15 @@ import { useUserStore } from "@/stores/user";
 import { useTestStore } from "@/stores/test";
 import { dateFormat } from "@/utils/formatTimePlus";
 import { formToRules } from "@/utils/formRules";
-const active = ref(1);
 const imgurl = ref("");
 const { user } = storeToRefs(useUserStore());
 const draftLeaveStore = usedraftLeave();
+const size = ref<"default" | "large" | "small">("default");
 const { testList } = storeToRefs(useTestStore());
 const ruleFormRef = ref<FormInstance>();
+  const disabledDate = (time: Date) => {
+  return time.getTime() < Date.now();
+};
 const ruleForm = reactive({
   start_time: "",
   end_time: "",
@@ -119,6 +126,7 @@ const saveDraft = (formEl: FormInstance | undefined) => {
             message: "请到草稿箱中查看",
             type: "success",
             showClose: false,
+            duration:1500
           });
       }
     } else {
@@ -163,6 +171,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
             message: "请到个人中心查看审核状态",
             type: "success",
             showClose: false,
+            duration:1500
           });
         }
       }

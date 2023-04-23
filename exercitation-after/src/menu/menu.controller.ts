@@ -31,9 +31,9 @@ export class MenuController {
   remove(@Param('id') id: string) {
     return this.menuService.remove(+id);
   }
-  @Post("/menuByRole")
-   findMenuByRole(@Body("roleId") roleId:number){
-    return  this.menuService.findMenuByRole(roleId)
+  @Get("/menuByRole/:roleId")
+   findMenuByRole(@Param("roleId") roleId:string){
+    return  this.menuService.findMenuByRole(+roleId)
   }
  
 }

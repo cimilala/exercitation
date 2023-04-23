@@ -9,23 +9,23 @@
           <div>{{ user?.username }}</div>
           <div class="header_info">
             <div>
-              <el-icon :size="20"> <Location /> </el-icon><span>湖北商贸</span>
+              <el-icon :size="20"> <Location /> </el-icon><span>{{ user_info?.college }}</span>
             </div>
             <div>
               <el-icon :size="20"> <ChatDotRound /> </el-icon
-              ><span>1746593891</span>
+              ><span>{{ user_info?.wechat }}</span>
             </div>
             <div>
               <el-icon :size="20">
                 <Phone />
               </el-icon>
-              <span>1746593891</span>
+              <span>{{ user_info?.phone }}</span>
             </div>
             <div>
               <el-icon :size="20">
                 <Message />
               </el-icon>
-              <span>1746593891@qq.com</span>
+              <span>{{ user_info?.email }}</span>
             </div>
           </div>
         </div>
@@ -33,13 +33,13 @@
           <div style="text-align: center"><span>个人信息</span></div>
           <div class="header_center_info">
             <div>
-              <span>姓名:李四</span>
-              <span>性别:男</span>
-              <span>班级:19计科本四</span>
+              <span>姓名:{{ user_info?.name }}</span>
+              <span>性别:{{ user_info?.sex }}</span>
+              <span>班级:{{ user_info?.class }}</span>
             </div>
             <div>
-              <span>学号:19106080901410</span>
-              <span>学院:人工智能学院</span>
+              <span>学号:{{ user_info?.stu_number }}</span>
+              <span>学院:{{ user_info?.college }}</span>
             </div>
           </div>
           <!-- <el-divider /> -->
@@ -47,17 +47,18 @@
           <div style="text-align: center">
             <span>个性签名</span>
             <el-input
-              v-model="textarea"
+            :value="user_info.per_signature"
               :rows="5"
               type="textarea"
               placeholder="Please input"
+              readonly
             />
           </div>
         </div>
       </div>
 
       <div class="person_right">
-        <echarts :option="option" style="width: 100%; height: 100%" />
+        <echarts :option="option" :style="style" />
       </div>
     </div>
     <div class="context">
@@ -75,7 +76,7 @@
 
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
-import { ref, watch } from "vue";
+import { reactive, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import {
   Message,
@@ -87,13 +88,15 @@ import echarts from "@/components/Echarts/Echarts.vue";
 import Testing from "@/components/Testing/Testing.vue";
 import Tested from "@/components/Tested/Tested.vue";
 import type { TabsPaneContext } from "element-plus";
-
-const textarea = ref("");
+import { useUserInfo } from "@/stores/user_info";
+const style = reactive({
+   width: '100%',
+   height: '100%'
+})
 const url = ref("");
-const store = useUserStore();
-const { user } = storeToRefs(store);
+const { user } = storeToRefs(useUserStore());
 const activeName = ref("first");
-
+const {user_info} = storeToRefs(useUserInfo())
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   // console.log(tab, event)
 };
@@ -116,11 +119,10 @@ const option = ref({
       type: "pie",
       radius: "50%",
       data: [
-        { value: 1048, name: "学习" },
-        { value: 735, name: "运动" },
-        { value: 580, name: "娱乐" },
-
-        { value: 300, name: "购物" },
+        { value: 10, name: "学习" },
+        { value:30, name: "运动" },
+        { value: 20, name: "娱乐" },
+        { value: 40, name: "购物" },
       ],
       emphasis: {
         itemStyle: {
@@ -135,7 +137,7 @@ const option = ref({
 watch(
   user,
   () => {
-    url.value = `http://localhost:3000/images/${user.value?.photo}.jpg`;
+    url.value = `http://localhost:3000/images/${user_info.value?.photo}`;
   },
   { immediate: true }
 );

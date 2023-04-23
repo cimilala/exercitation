@@ -22,7 +22,7 @@ export class InternshipLeaveService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} internshipLeave`;
+    return this.internshipLeaveRepository.findOneBy({id});
   }
 
   update(id: number, updateInternshipLeaveDto: UpdateInternshipLeaveDto) {

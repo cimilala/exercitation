@@ -20,7 +20,7 @@ export class IntershipChangeService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} intershipChange`;
+    return this.intershipChangeRepository.findOneBy({id});
   }
 
   update(id: number, updateIntershipChangeDto: UpdateInternshipChangeDto) {

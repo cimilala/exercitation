@@ -33,7 +33,7 @@
       </el-form-item>
     </el-form>
     <Table
-    :table-data="tableData"
+    :table-data="filtableData"
     :options="options"
     :add="addDayNews"
     :apply="false"
@@ -85,7 +85,9 @@ import { Search, RefreshLeft } from "@element-plus/icons-vue";
 import {  getDayNewsListByRole } from "@/utils/api";
 import { elMessage } from "@/utils/myElMessage";
 import type { FormInstance } from "element-plus";
+import { tableSearch } from "@/utils/tableSerach";
 const tableData = ref<any[]>([]);
+const filtableData = ref<Apply[]>([]);
 const isShow = ref(true)
 const options = ref<any[]>([
   {
@@ -121,7 +123,9 @@ const content = (row: any) => {
   dialogTableVisible.value = true;
   textarea.value = row.content;
 };
-const search = () => {};
+const search = () => {
+  filtableData.value = tableSearch(ruleForm, tableData.value);
+};
 const ruleFormRef = ref<FormInstance>();
 const addDayNews = () => {
   isShow.value = false
@@ -139,6 +143,7 @@ onMounted(async ()=>{
     const {status,data} = res
     if(status === 200){
       tableData.value = data
+      filtableData.value = tableData.value;
     }
      
 })

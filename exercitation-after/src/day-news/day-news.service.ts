@@ -23,7 +23,7 @@ export class DayNewsService {
   }
 
   findOne(id: number) {
-    return this.dayNewsRepository.find();
+    return this.dayNewsRepository.findOneBy({id});
   }
 
   update(id: number, updateDayNewDto: UpdateDayNewDto) {

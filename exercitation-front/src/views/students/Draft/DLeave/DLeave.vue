@@ -36,12 +36,18 @@
 import { onActivated, onMounted, ref } from "vue";
 import Table from "@/components/Table/Table.vue";
 import { usedraftLeave } from "@/stores/draft_leave";
-import { ElMessage, ElMessageBox, type UploadUserFile } from "element-plus";
+import {
+  ElMessage,
+  ElMessageBox,
+  ElNotification,
+  type UploadUserFile,
+} from "element-plus";
 import { addTesting, getLeaveListByRole, updateLeave } from "@/utils/api";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { dateFormat } from "@/utils/formatTimePlus";
 import { useTestStore } from "@/stores/test";
+import { elMessage } from "@/utils/myElMessage";
 const draftLeaveStore = usedraftLeave();
 const fileList = ref<UploadUserFile[]>([]);
 const tableData = ref<any[]>([]);
@@ -52,50 +58,35 @@ const handleCancel = () => {
   dialogTableVisible.value = false;
   fileList.value = [];
 };
-const handleApplyClick = async (index: number, row: any)=>{
-  const res =await updateLeave(`/internship-leave/${row.id}`,{
-    status:1
-  })
-  if(res.status===200){
+const handleApplyClick = async (index: number, row: any) => {
+  const res = await updateLeave(`/internship-leave/${row.id}`, {
+    status: 1,
+  });
+  if (res.status === 200) {
     const testres = await addTesting("/test", {
-          type_id: row.id,
-          test_type: "请假申请",
-          status: 1,
-        });
-        if(testres.status===200){
-          testList.value.push({
-            ...testres.data,
-            created_date:dateFormat(testres.data.created_date)
-          });
-        }
-  }
-}
-const handleApplyCancel=()=>{
-
-}
-const handleDelete = ()=>{
-  ElMessageBox.confirm(
-    '您确定要删除这条记录吗?',
-    'Warning',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
+      type_id: row.id,
+      test_type: "请假申请",
+      status: 1,
+    });
+    if (testres.status === 200) {
+      testList.value.push({
+        ...testres.data,
+        created_date: dateFormat(testres.data.created_date),
+      });
+      ElNotification({
+        title: "申请成功",
+        message: "请到个人中心查看审核状态",
+        type: "success",
+        showClose: false,
+        duration: 1500,
+      });
     }
-  )
-    .then(() => {
-      ElMessage({
-        type: 'success',
-        message: 'Delete completed',
-      })
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: 'Delete canceled',
-      })
-    })
-}
+  }
+};
+const handleApplyCancel = () => {};
+const handleDelete = () => {
+  elMessage("您确定要删除这条记录吗?")
+};
 const handleConfirm = () => {
   dialogTableVisible.value = false;
   fileList.value = [];

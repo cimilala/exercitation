@@ -60,7 +60,7 @@ import {
 import { updateUserStatus, IntershipList, getUserStatus, addTesting } from "@/utils/api";
 import { onMounted, reactive, ref } from "vue";
 import { useUserStore } from "@/stores/user";
-import {  ElMessageBox, ElNotification, type FormInstance } from "element-plus";
+import { ElNotification, type FormInstance } from "element-plus";
 import { storeToRefs } from "pinia";
 import { useTestStore } from "@/stores/test";
 import { dateFormat } from "@/utils/formatTimePlus";
@@ -190,6 +190,7 @@ if(res.status===200){
     message: "请到个人中心查看审核状态",
     type: 'success',
     showClose: false,
+    duration:1500
   })
 
 

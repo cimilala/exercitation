@@ -10,11 +10,6 @@ export class User {
     roleId:number
     @Column()
     password:string
-    @Column()
-    sex:string
-    @Column()
-    name:string
-    @Column()
-    photo:string
+    
 }
  

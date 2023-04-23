@@ -1,14 +1,31 @@
-import internal from "stream";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity("stu_info")
+@Entity('stu_info')
 export class StuInfo {
-    @PrimaryGeneratedColumn()
-    id:number
-    @Column()
-    stu_number:string
-    @Column()
-    class:string
-    @Column()
-    userId:number
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column()
+  userId: number;
+  @Column()
+  sex:string
+  @Column()
+  name:string
+  @Column()
+  stu_number: string;
+  @Column()
+  class: string;
+  @Column()
+  school: string;
+  @Column()
+  email: string;
+  @Column()
+  phone: string;
+  @Column()
+  wechat: string;
+  @Column()
+  college: string;
+  @Column()
+  per_signature: string;
+  @Column()
+  photo:string
 }

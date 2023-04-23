@@ -19,7 +19,11 @@
       >
         <template #default="scope">
           <div style="display: flex; justify-content: center">
-            <el-button type="primary" size="small" :icon="View"
+            <el-button 
+            type="primary"
+             size="small" 
+             :icon="View"
+             @click="detailClick(scope.index, scope.row)"
               >详情
             </el-button>
             <el-button
@@ -39,16 +43,36 @@
 <script setup lang="ts">
 import { onActivated, onMounted, ref } from "vue";
 import { View, CircleCloseFilled } from "@element-plus/icons-vue";
-import { ElMessageBox } from "element-plus";
 import { useTestStore } from "@/stores/test";
 import { storeToRefs } from "pinia";
-import { getTestingList } from "@/utils/api";
+import { getChangeById, getDayNewsById, getLeaveById, getTestingList } from "@/utils/api";
 import { dateFormat } from "@/utils/formatTimePlus";
 import { elMessage } from "@/utils/myElMessage";
+import router from "@/router";
+import { useRouter } from "vue-router";
 const tableData = ref<any[]>([]);
-const handleApplyCancel = (index: number, row: Apply) => {
+const push = useRouter()
+const handleApplyCancel = (index: number, row: any) => {
   elMessage('您确定要取消申请吗?')
 };
+const detailClick = async (index:string,row:any)=>{
+  console.log(row);
+  
+  if(row.test_type==="请假申请"){
+   
+   const res =await getLeaveById(`/internship-leave/${row.type_id}`)
+  
+  }else if(row.test_type==="实习变更"){
+    const res =await getChangeById(`/internship-change/${row.type_id}`)
+    
+  }
+  else if(row.test_type==="新增日报"){
+    const res= await getDayNewsById(`/day-news/${row.type_id}`)
+    
+  }
+
+
+}
 const typeChange = (scope: any) => {
   switch (scope.row.status) {
     case 1:
@@ -77,8 +101,6 @@ const satusChange = (scope: any) => {
 };
 const { testList } = storeToRefs(useTestStore());
 onActivated(() => {
-  console.log("cc");
-
   tableData.value = testList.value.filter((item) => item.status === 1);
 });
 

@@ -1,40 +1,40 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="form" label-width="150px">
+    <el-form :model="ruleForm" ref="form" label-width="150px">
       <div class="updateinfo">
         <div class="left">
-          <el-form-item label="头像" prop="avatar">
+          <el-form-item label="头像" prop="photo">
             <Upload :fileList="fileList" />
           </el-form-item>
-          <el-form-item label="地理位置" prop="password">
-            <el-input v-model="form.password"></el-input>
+          <el-form-item label="性别" prop="sex">
+            <el-input v-model="ruleForm.sex"></el-input>
           </el-form-item>
-          <el-form-item label="微信" prop="nickname">
-            <el-input v-model="form.nickname"></el-input>
+          <el-form-item label="微信" prop="wechat">
+            <el-input v-model="ruleForm.wechat"></el-input>
           </el-form-item>
-          <el-form-item label="邮箱" prop="age">
-            <el-input v-model="form.age"></el-input>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="ruleForm.email"></el-input>
 
           </el-form-item>
-          <el-form-item label="电话" prop="email">
-            <el-input v-model="form.email"></el-input>
+          <el-form-item label="电话" prop="phone">
+            <el-input v-model="ruleForm.phone"></el-input>
           </el-form-item>
         </div>
         <div class="right">
-          <el-form-item label="学号" prop="id">
-            <el-input v-model="form.id" disabled></el-input>
+          <el-form-item label="学号" prop="stu_number">
+            <el-input v-model="ruleForm.stu_number" disabled></el-input>
           </el-form-item>
-          <el-form-item label="班级" prop="account">
-            <el-input v-model="form.account" disabled></el-input>
+          <el-form-item label="班级" prop="class">
+            <el-input v-model="ruleForm.class" disabled></el-input>
           </el-form-item>
-          <el-form-item label="学院" prop="area" disabled>
-            <el-input v-model="form.area"></el-input>
+          <el-form-item label="学院" prop="college" >
+            <el-input v-model="ruleForm.college" disabled></el-input>
           </el-form-item>
           <el-form-item label="兴趣爱好" prop="hobby">
-            <el-input v-model="form.hobby"></el-input>
+            <el-input v-model="ruleForm.hobby"></el-input>
           </el-form-item>
-          <el-form-item label="个性签名" prop="design">
-            <el-input v-model="form.textarea" :rows="5" type="textarea" placeholder="Please input" />
+          <el-form-item label="个性签名" prop="per_signature">
+            <el-input v-model="ruleForm.textarea" :rows="5" type="textarea" placeholder="Please input" />
           </el-form-item>
 
         </div>
@@ -53,8 +53,10 @@ import { ref, reactive, toRefs } from "vue";
 import Upload from "@/components/Upload/Upload.vue"
 import type { UploadUserFile } from "element-plus";
 import { useUserStore } from "@/stores/user";
-const store = useUserStore()
-const { user } = toRefs(store)
+import { useUserInfo } from "@/stores/user_info";
+import { storeToRefs } from "pinia";
+const { user } = toRefs(useUserStore())
+const {user_info} = storeToRefs(useUserInfo())
 const fileList = ref<UploadUserFile[]>([
   {
     name: 'plant-1.png',
@@ -62,27 +64,17 @@ const fileList = ref<UploadUserFile[]>([
   },
 
 ])
-const form = reactive({
-  avatar: "",
-  password: "",
-  nickname: "",
-  age: "",
-  email: "",
-  mobilePhoneNumber: "",
-  id: "",
-  account: "",
-  area: "",
-  hobby: "",
-  work: "",
-  textarea: ""
+const ruleForm = reactive({
+  sex: user_info.value?.sex,
+  wechat: user_info.value?.wechat,
+  phone: user_info.value?.phone,
+  email:user_info.value?.email,
+  stu_number: user_info.value?.stu_number,
+  class: user_info.value?.class,
+  college: user_info.value?.college,
+  hobby: user_info.value?.hobby,
+  textarea:user_info.value?.per_signature
 });
-
-const rules = reactive({
-  //   nickname: [{ required: true, message: "昵称不能为空", trigger: "blur" }],
-  //   password: [{ required: true, message: "账号密码不能为空", trigger: "blur" }],
-});
-
-
 const submit = () => { };
 const handleClose = () => { };
 

@@ -5,12 +5,14 @@ import { User, Unlock } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 import { ElNotification } from "element-plus";
 import "element-plus/es/components/notification/style/css";
-import { getRole, login } from "@/utils/api";
+import { getRole, getUserInfo, login } from "@/utils/api";
 import { useUserStore } from "@/stores/user";
 import { useMenuStore } from "@/stores/menu";
+import { storeToRefs } from "pinia";
+import { useUserInfo } from "@/stores/user_info";
 const userStore = useUserStore(); //获取userStore中的信息
 const menuStore = useMenuStore();
-
+const {user_info} = storeToRefs(useUserInfo())
 const router = useRouter();
 const ruleFormRef = ref<FormInstance>();
 //获取用户输入的表单数据
@@ -39,26 +41,28 @@ const submitForm = (formEl: FormInstance | undefined) => {
           password: ruleForm.password,
           role: ruleForm.role_id,
         };
-
-        const value: responseType = await login("/login", user);
+        const value = await login("/login", user);
         if (value.status === 200) {
+          localStorage.setItem("username", value.data?.username??"");
+          //保存用户基本信息
+          userStore.user = value.data;
+          //获取用户角色名
+          const roleData = await getRole(`/role/${value.data.roleId}`);
+          if (roleData.status === 200) {
+            localStorage.setItem("role_name", roleData.data.role_name);
+            userStore.saveUser()
+            console.log("b");
+            
+            router.push({
+            path: '/',
+          });
+          }
           ElNotification({
             title: "消息",
             message: h("i", { style: "color:green" }, "登录成功"),
             duration: 1000,
             showClose: false,
           });
-          localStorage.setItem("username", value.data?.username);
-          userStore.user = value.data;
-          menuStore.saveMenuList();
-          const roleData = await getRole(`/role/${value.data.roleId}`);
-          if (roleData.status === 200) {
-            localStorage.setItem("role_name", roleData.data.role_name);
-            router.push({
-            path: '/',
-          });
-          }
-         
         } else {
           if (value.message === "用户不存在") {
             ElNotification.error({

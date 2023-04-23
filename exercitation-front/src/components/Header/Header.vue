@@ -15,7 +15,7 @@
      
       <img :src="url"  alt=""  >
      
-     <span style="margin-left:15px;">嗨,{{ user?.username}}</span>
+     <span style="margin-left:15px;">嗨,{{ user_info?.username}}</span>
       <el-icon class="el-icon--right">
         <arrow-down />
       </el-icon>
@@ -43,11 +43,10 @@ import {
   Expand,ArrowDown,Fold,
 } from "@element-plus/icons-vue";
 import { useRouter } from 'vue-router';
-
 import { storeToRefs } from 'pinia';
 import 'element-plus/es/components/message/style/css'
 import 'element-plus/es/components/message-box/style/css'
-import { useUserStore } from '@/stores/user';
+import { useUserInfo } from '@/stores/user_info';
 
 
     //控制左边菜单栏的伸缩
@@ -66,11 +65,11 @@ const exit = ()=>{
 const personCenter = () =>{
   router.push({path:"/main/person_center",query:{title:"个人中心"}})
 }
-const store = useUserStore()
-const {user} = storeToRefs(store)
+
+const {user_info} = storeToRefs(useUserInfo())
 const url = ref("")
-watch(user,()=>{
-  url.value= `http://localhost:3000/images/${user.value?.photo}.jpg`
+watch(user_info,()=>{
+  url.value= `http://localhost:3000/images/${user_info.value?.photo}`
 },{immediate:true})
 
 const isCollapse = ref(false)

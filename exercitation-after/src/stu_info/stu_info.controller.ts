@@ -11,6 +11,10 @@ export class StuInfoController {
   create(@Body() createStuInfoDto: CreateStuInfoDto) {
     return this.stuInfoService.create(createStuInfoDto);
   }
+  @Post("/getUserInfo")
+  find(@Body() body:UpdateStuInfoDto){
+    return this.stuInfoService.findOneByUserId(body)
+  }
 
   @Get()
   findAll() {

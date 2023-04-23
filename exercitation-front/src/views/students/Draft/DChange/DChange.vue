@@ -21,7 +21,8 @@ import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/user';
 import { useTestStore } from '@/stores/test';
 import { dateFormat } from '@/utils/formatTimePlus';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
+import { elMessage } from '@/utils/myElMessage';
 const {user} = storeToRefs(useUserStore()) 
 const draftChangeStore = usedraftChange()
 const { testList } = storeToRefs(useTestStore());
@@ -67,31 +68,17 @@ const handleApplyClick = async (index: number, row: any) => {
             ...testres.data,
             created_date:dateFormat(testres.data.created_date)
           });
+          ElNotification({
+    title: '申请成功',
+    message: "请到个人中心查看审核状态",
+    type: 'success',
+    showClose: false,
+  })
         }
   }
 };
 const handleDelete = ()=>{
-  ElMessageBox.confirm(
-    '您确定要删除这条记录吗?',
-    'Warning',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
-  )
-    .then(() => {
-      ElMessage({
-        type: 'success',
-        message: 'Delete completed',
-      })
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: 'Delete canceled',
-      })
-    })
+  elMessage("您确定要删除这条记录吗?")
 }
 onActivated(()=>{
   tableData.value = draftChangeStore.draftChangeList

@@ -110,6 +110,7 @@ const submitForm=(formEl: FormInstance | undefined)=>{
             message: "请到个人中心查看审核状态",
             type: "success",
             showClose: false,
+            duration:1500
           });
         }
   }
@@ -147,6 +148,7 @@ const saveDraft = async (formEl: FormInstance | undefined)=>{
             message: "请到草稿箱中查看",
             type: "success",
             showClose: false,
+            duration:1500
           });
   }
   

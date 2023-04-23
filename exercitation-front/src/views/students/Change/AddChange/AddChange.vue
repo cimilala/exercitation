@@ -60,6 +60,8 @@ const editValue = ref("");
 const valueHtml = (valueHtml: string) => {
   editValue.value = valueHtml;
 };
+
+
 const draftChangeStore = usedraftChange();
 const { testList } = storeToRefs(useTestStore());
 const userStore = useUserStore();
@@ -95,6 +97,7 @@ const saveDraft = (formEl: FormInstance | undefined) => {
             message: "请到草稿箱中查看",
             type: "success",
             showClose: false,
+            duration:1500
           });
       }
     } else {
@@ -118,7 +121,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       if (res.status === 200) {
         const testres = await addTesting("/test", {
           type_id: res.data.id,
-          test_type: "实习更改",
+          test_type: "实习变更",
           status: 1,
         });
         if (testres.status === 200) {
@@ -131,6 +134,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
             message: "请到个人中心查看审核状态",
             type: "success",
             showClose: false,
+            duration:1500
           });
         }
       }

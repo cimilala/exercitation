@@ -21,7 +21,7 @@ export class InternshipApplyService {
   }
 
   findOne(id: number) {
-    return this.InternshipApplyRepository.findOneBy({id:+id});
+    return this.InternshipApplyRepository.findOneBy({id});
   }
 
   async update(id:number,entityLike:UpdateInternshipApplyDto){
