@@ -10,14 +10,14 @@ export class CreateInternshipApplyDto {
     place:string;
     @IsNumberString()
     @IsNotEmpty()
-    totalNumber:number;
+    total_number:number;
     @IsNumberString()
     @IsNotEmpty()
-    currentNumber:number;
+    current_number:number;
     @IsString()
-    startTime:string;
+    start_time:string;
     @IsString()
-    endTime:string;
+    end_time:string;
     @IsString()
     @IsNotEmpty()
     teacher:string

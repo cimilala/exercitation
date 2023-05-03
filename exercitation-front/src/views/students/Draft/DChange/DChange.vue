@@ -21,7 +21,7 @@ import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/user';
 import { useTestStore } from '@/stores/test';
 import { dateFormat } from '@/utils/formatTimePlus';
-import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
+import { ElNotification } from 'element-plus';
 import { elMessage } from '@/utils/myElMessage';
 const {user} = storeToRefs(useUserStore()) 
 const draftChangeStore = usedraftChange()
@@ -77,7 +77,9 @@ const handleApplyClick = async (index: number, row: any) => {
         }
   }
 };
-const handleDelete = ()=>{
+const handleDelete = (index:number,row:unknown)=>{
+ 
+  
   elMessage("您确定要删除这条记录吗?")
 }
 onActivated(()=>{

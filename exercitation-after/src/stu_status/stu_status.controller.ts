@@ -6,12 +6,18 @@ import { UpdateStuStatusDto } from './dto/update-stu_status.dto';
 @Controller('stu_status')
 export class StuStatusController {
   constructor(private readonly stuStatusService: StuStatusService) {}
-
+@Get("/findIsApply/:apply_status")
+findIsApplyAndStuInfo(@Param("apply_status") apply_status:number){
+    return this.stuStatusService.findIsApplyAndStuInfo(apply_status)
+}
   @Post("")
   create(@Body() createStuStatusDto: CreateStuStatusDto) {
     return this.stuStatusService.create(createStuStatusDto);
   }
-
+@Post("/isApply")
+findIsApply(@Body() entity:UpdateStuStatusDto){
+    return this.stuStatusService.findIsApply(entity)
+}
   @Get()
   findAll() {
     return this.stuStatusService.findAll();

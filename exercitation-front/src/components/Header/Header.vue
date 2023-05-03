@@ -12,9 +12,7 @@
         <div class="right">
           <el-dropdown>
     <el-button class="el-dropdown-link" link>
-     
-      <img :src="url"  alt=""  >
-     
+      <el-avatar :size="40" :src="url" />
      <span style="margin-left:15px;">嗨,{{ user?.username}}</span>
       <el-icon class="el-icon--right">
         <arrow-down />
@@ -50,7 +48,6 @@ import 'element-plus/es/components/message-box/style/css'
 import { useUserInfo } from '@/stores/user_info';
 import { useUserStore } from '@/stores/user';
 
-
     //控制左边菜单栏的伸缩
     const emit = defineEmits<{
   (e: 'change', isCollapse: boolean): void
@@ -65,11 +62,12 @@ const exit = ()=>{
   router.replace({path:"/login"})
 }
 const personCenter = () =>{
-  router.push({path:"/main/person_center",query:{title:"个人中心"}})
+  router.push({path:"/person_center",query:{title:"个人中心"}})
 }
 
 const {user} = storeToRefs(useUserStore())
 const {user_info} = storeToRefs(useUserInfo())
+
 const url = ref("")
 watch(user_info,()=>{
   url.value= `http://localhost:3000/images/${user_info.value?.photo}`
@@ -94,7 +92,11 @@ justify-content: space-between;
 align-items: center;
 
 }
-
+.left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 img{
   width: 40px;

@@ -5,7 +5,7 @@ import { User, Unlock } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 import { ElNotification } from "element-plus";
 import "element-plus/es/components/notification/style/css";
-import { getRole, getUserInfo, login } from "@/utils/api";
+import { getRole, login } from "@/utils/api";
 import { useUserStore } from "@/stores/user";
 import { useMenuStore } from "@/stores/menu";
 import { storeToRefs } from "pinia";
@@ -34,7 +34,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate(async (valid) => {
     if (valid) {
       //学生登录
-      if (ruleForm.role_id === "3") {
+  
         console.log("submit!");
         const user = {
           username: ruleForm.username,
@@ -51,8 +51,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
           if (roleData.status === 200) {
             localStorage.setItem("role_name", roleData.data.role_name);
             userStore.saveUser()
-            console.log("b");
-            
             router.push({
             path: '/',
           });
@@ -81,7 +79,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
             });
           }
         }
-      }
+      
     } else {
       console.log("error submit!");
       return false;

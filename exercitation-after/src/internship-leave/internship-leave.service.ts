@@ -9,10 +9,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class InternshipLeaveService {
   constructor(
     @InjectRepository(InternshipLeave)
-    private readonly internshipLeaveRepository:Repository<InternshipLeave>
+    private readonly internshipLeaveRepository: Repository<InternshipLeave>,
   ){}
   create(createInternshipLeaveDto: CreateInternshipLeaveDto) {
-    const internshipLeave = this.internshipLeaveRepository.create(createInternshipLeaveDto)
+    const internshipLeave = this.internshipLeaveRepository.create(
+      createInternshipLeaveDto,
+    );
     return this.internshipLeaveRepository.save(internshipLeave)
    
   }
@@ -22,17 +24,17 @@ export class InternshipLeaveService {
   }
 
   findOne(id: number) {
-    return this.internshipLeaveRepository.findOneBy({id});
+    return this.internshipLeaveRepository.findOneBy({ id });
   }
 
   update(id: number, updateInternshipLeaveDto: UpdateInternshipLeaveDto) {
-    return this.internshipLeaveRepository.update(id,updateInternshipLeaveDto);
+    return this.internshipLeaveRepository.update(id, updateInternshipLeaveDto);
   }
 
   remove(id: number) {
     return `This action removes a #${id} internshipLeave`;
   }
-  find(entityLike:UpdateInternshipLeaveDto){
-    return this.internshipLeaveRepository.find({where:entityLike})
+  find(entityLike: UpdateInternshipLeaveDto) {
+    return this.internshipLeaveRepository.find({ where: entityLike });
   }
 }

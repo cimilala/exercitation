@@ -4,6 +4,8 @@ import { UpdateInternshipChangeDto } from './dto/update-internship-change.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InternshipChange } from './entities/internship-change.entity';
+import { StuInfo } from "../stu_info/entities/stu_info.entity";
+import { User } from "../user/entities/user.entity";
 
 @Injectable()
 export class IntershipChangeService {
@@ -32,5 +34,14 @@ export class IntershipChangeService {
   }
   find(entityLike:UpdateInternshipChangeDto){
     return this.intershipChangeRepository.find({where:entityLike})
+  }
+  qsq(status:number){
+    return this.intershipChangeRepository
+      .createQueryBuilder("internship_change")
+      .innerJoinAndSelect(StuInfo,"stuInfo","internship_change.userId=stuInfo.userId")
+      .innerJoinAndSelect(User,"user","internship_change.userId=user.id")
+      .where("internship_change.status=:status",{status})
+      .getRawMany()
+
   }
 }

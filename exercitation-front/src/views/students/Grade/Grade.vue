@@ -1,5 +1,5 @@
 <template>
-  <div class="grade" v-if="absentShow">
+  <div class="grade" >
     <div class="header">
       <div class="left">
         <img :src="url" alt="" />
@@ -222,11 +222,10 @@
 
    
   </div>
-  <RouterView v-else></RouterView>
+  
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
 import { onActivated, onMounted, reactive, ref, toRefs } from "vue";
 import { ArrowRight } from "@element-plus/icons-vue";
 import {useRouter} from "vue-router"
@@ -241,10 +240,10 @@ const router = useRouter()
 const absentShow= ref(true)
 const goAbsentInfo = ()=>{
   absentShow.value = false
-  router.push({path:"/grade/grade_absent"})
+  router.push({path:"/grade_absent"})
 }
 const goDayNews=()=> {
-router.push({path:"/grade/dayNews",query:{title:"实习日报"}})
+router.push({path:"/dayNews",query:{title:"实习日报"}})
 }
 onMounted(()=>{
   //获取该学生的请假，缺勤的日期
@@ -258,10 +257,6 @@ onActivated(()=>{
 <style lang="less" scoped>
   .grade {
     width: 100%;
-  margin-left: 10px;
-  margin-right: 10px;
-
- 
   .header {
     width: 100%;
   height: 130px;

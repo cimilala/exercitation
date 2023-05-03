@@ -7,6 +7,7 @@ import { InternshipApply } from './entities/internship-apply.entity';
 @Module({
   imports:[TypeOrmModule.forFeature([InternshipApply])],
   controllers: [InternshipApplyController],
-  providers: [InternshipApplyService]
+  providers: [InternshipApplyService],
+  exports:[InternshipApplyService]
 })
 export class InternshipApplyModule {}

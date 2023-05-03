@@ -10,6 +10,8 @@ export class Test {
     type_id:number
     @Column()
     test_type:string
+    @Column()
+    userId:number
     @CreateDateColumn({type:"timestamp"})
     created_date: Date;
     @UpdateDateColumn({type:"timestamp"})

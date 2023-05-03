@@ -89,6 +89,7 @@ const saveDraft = (formEl: FormInstance | undefined) => {
         isDraft: true,
         userId: user.value?.id,
       });
+     
       const { status, data } = res;
       if (status === 200) {
         draftChangeStore.draftChangeList.push(data);
@@ -123,6 +124,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
           type_id: res.data.id,
           test_type: "实习变更",
           status: 1,
+          userId:user.value?.id
         });
         if (testres.status === 200) {
           testList.value.push({

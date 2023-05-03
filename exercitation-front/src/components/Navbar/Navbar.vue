@@ -19,7 +19,7 @@
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import menuMap from "@/utils/localmenuMap";
-const dynamicTags = ref(["首页"]);
+const dynamicTags:Record<string,any> = ref(["首页"]);
 const isClosable = (tag: string) => {
   if (tag === "首页") {
     return false;
@@ -27,6 +27,15 @@ const isClosable = (tag: string) => {
 };
 const handleClose = (tag: string) => {
   dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1);
+  Object.keys(menuMap).forEach((item) => {
+    if (menuMap[item] == dynamicTags.value[dynamicTags.value.length-1]) {
+      router.push({
+        path: `${item}`,
+       
+      });
+    }
+  });
+ 
 };
 const router = useRouter();
 const handleClick = (tag: string) => {
@@ -62,7 +71,7 @@ watch(
   height: 40px;
 }
 .mx-1 {
-  margin-right: 10px;
+  margin-right: 2px;
   cursor: pointer;
 }
 </style>

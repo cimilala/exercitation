@@ -1,25 +1,27 @@
 <template>
-  <div class="main-menu">
-    <div class="logo">
-      <!-- <img src="" alt="">
-      <span class="title">xxx后台管理系统</span> -->
-    </div>
-  </div>
+   <el-scrollbar height="100vh">
+  <div class="main-menu" >
+    <Logo :collapse="isCollapse"/>
+
   <div class="side">
-    <el-menu
+      <el-menu
       :default-active="active"
       class="el-menu-vertical-demo"
       :collapse="isCollapse"
       active-color="#001528"
       background-color="#545c64"
-      text-color="#fff"
+      text-color="#f4f6f8"
       @open="handleOpen"
       @close="handleClose"
       @select="handleSelect"
     >
-      <MenuItem :menu-list="menuList"></MenuItem>
+      <MenuItem :menu-list="menuStore.formatMenuList"></MenuItem>
     </el-menu>
+
+   
   </div>
+  </div>
+</el-scrollbar>
 </template>
 <script setup lang="ts">
 import {  ref } from "vue";
@@ -27,13 +29,13 @@ import { useRoute, useRouter } from "vue-router";
 import menuMap from "@/utils/localmenuMap";
 import { useMenuStore } from "@/stores/menu";
 import MenuItem from "../MenuItem/MenuItem.vue";
+import Logo from "../Header/Logo.vue";
 const router = useRouter();
-const menuList = ref([]);
 const menuStore = useMenuStore()
 const route = useRoute()
-const active = ref(route.path);
+const active = ref("/"+route.path.split("/")[1]);
 //菜单栏伸缩
-defineProps<{
+ defineProps<{
   isCollapse:boolean
 }>()
 //header组件传来的事件并携带是否伸缩的参数
@@ -56,10 +58,11 @@ const handleSelect = (key: string, keyPath: string[]) => {
   });
 };
 
-menuList.value = menuStore.formatMenuList.value
+
 </script>
 
 <style scoped>
+
 .side {
   height: 100%;
 }
@@ -67,4 +70,5 @@ menuList.value = menuStore.formatMenuList.value
   width: 200px;
  
 }
+
 </style>

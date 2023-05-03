@@ -12,8 +12,9 @@
     "/agreemen":"实习协议",
     "/leave":"请假申请",
    "/addNews":"新增日报",
-   "/person_cente":"个人中心",
+   "/person_center":"个人中心",
    "/self_edit":"编辑资料",
-   "/draft":"草稿箱"
+   "/draft":"草稿箱",
+   "/person_apply":"自主实习申请"
  }
  export default menuMap

@@ -6,7 +6,10 @@ import { UpdateInternshipChangeDto } from './dto/update-internship-change.dto';
 @Controller('internship-change')
 export class IntershipChangeController {
   constructor(private readonly intershipChangeService: IntershipChangeService) {}
-
+  @Get("/getIsChange/:status")
+  qsq(@Param('status') status:number){
+    return this.intershipChangeService.qsq(status)
+  }
   @Post()
   create(@Body() createIntershipChangeDto: CreateInternshipChangeDto) {
     return this.intershipChangeService.create(createIntershipChangeDto);
@@ -35,4 +38,5 @@ export class IntershipChangeController {
   find(@Body() body:UpdateInternshipChangeDto){
     return this.intershipChangeService.find(body)
   }
+
 }

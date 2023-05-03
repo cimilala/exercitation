@@ -32,6 +32,12 @@ export class TestService {
   remove(id: number) {
     return `This action removes a #${id} testing`;
   }
+
+  findTestByRole(enetity:UpdateTestDto){
+    return this.testingRepository.find({where:enetity})
+
+  }
+
   findTesting(){
     return this.testingRepository.find({where:{status:1}})
   }

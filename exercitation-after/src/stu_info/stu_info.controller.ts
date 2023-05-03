@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { StuInfoService } from './stu_info.service';
 import { CreateStuInfoDto } from './dto/create-stu_info.dto';
 import { UpdateStuInfoDto } from './dto/update-stu_info.dto';
+import { UpdateStuStatusDto } from "../stu_status/dto/update-stu_status.dto";
 
 @Controller('stu_info')
 export class StuInfoController {
@@ -11,11 +12,14 @@ export class StuInfoController {
   create(@Body() createStuInfoDto: CreateStuInfoDto) {
     return this.stuInfoService.create(createStuInfoDto);
   }
-  @Post("/getUserInfo")
-  find(@Body() body:UpdateStuInfoDto){
+  @Post("/getStuInfo")
+  find(@Body() body:UpdateStuStatusDto){
     return this.stuInfoService.findOneByUserId(body)
   }
-
+  @Post("/getStuInfoBy")
+  finds(@Body() entity:UpdateStuInfoDto){
+    return this.stuInfoService.find(entity)
+  }
   @Get()
   findAll() {
     return this.stuInfoService.findAll();

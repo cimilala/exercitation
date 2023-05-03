@@ -3,7 +3,7 @@
     <div class="title">
       <span>我的实习日报</span>
     </div>
-    <div class="daynews" v-if="isShow">
+    <div class="daynews" >
       <div class="search">
       <el-button :icon="Search" type="primary" @click="search"
           >搜索</el-button
@@ -11,27 +11,16 @@
         <el-button
           :icon="RefreshLeft"
           type="info"
-          @click="resetForm(ruleFormRef)"
+          @click="resetForm(myformRef)"
           >重置</el-button
         >
     </div>
-    <el-form
-      ref="ruleFormRef"
-      :model="ruleForm"
-      status-icon
-      class="demo-ruleForm"
-     
-    >
-    <el-form-item label="日期" prop="time">
-        <el-input v-model="ruleForm.time" />
-      </el-form-item>
-      <el-form-item label="标题" prop="title">
-        <el-input v-model="ruleForm.title" />
-      </el-form-item>
-      <el-form-item label="周次" prop="week">
-        <el-input v-model="ruleForm.week" />
-      </el-form-item>
-    </el-form>
+    <my-form
+        :form-fields="formFields"
+        ref="myformRef"
+        :colspan="8"
+      >
+      </my-form>
     <Table
     :table-data="filtableData"
     :options="options"
@@ -55,18 +44,6 @@
     
   </Table>
     </div>
-    <div class="router" v-else >
-      <router-view v-slot="{Component}">
-          <keep-alive>
-            <component :is="Component" />
-          </keep-alive>
-        </router-view>
-    </div>
-    
-
-    
-   
-   
    
   </div>
   <el-dialog v-model="dialogTableVisible" title="日报内容">
@@ -84,12 +61,42 @@ import router from "@/router";
 import { Search, RefreshLeft } from "@element-plus/icons-vue";
 import {  getDayNewsListByRole } from "@/utils/api";
 import { elMessage } from "@/utils/myElMessage";
-import type { FormInstance } from "element-plus";
 import { tableSearch } from "@/utils/tableSerach";
 import Table from "@/components/Table/Table.vue";
+import MyForm from "@/components/MyElComponents/MyForm.vue";
+import useResetForm from "@/utils/myUse/useResetForm";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user";
 const tableData = ref<any[]>([]);
 const filtableData = ref<Apply[]>([]);
-const isShow = ref(true)
+const {user }= storeToRefs(useUserStore())
+  const myformRef = ref();
+const formFields = ref<
+  IformConfig<ISelectType | ICustom | IInput | IDatePicker>[]
+>([
+  {
+    type: {
+      name: "input",
+    },
+    prop: "title",
+    label: "标题",
+  },
+  {
+    type: {
+      name: "data-picker",
+    },
+    prop: "time",
+    label: "日期",
+  },
+  {
+    type: {
+      name: "input",
+    },
+    prop: "week",
+    label: "周次",
+  },
+ 
+]);
 const options = ref<any[]>([
   {
     prop:"id",
@@ -119,6 +126,7 @@ const ruleForm = reactive({
   time: "",
   title:""
 });
+const  resetForm = useResetForm()
 const dialogTableVisible = ref(false);
 const content = (row: any) => {
   dialogTableVisible.value = true;
@@ -127,20 +135,19 @@ const content = (row: any) => {
 const search = () => {
   filtableData.value = tableSearch(ruleForm, tableData.value);
 };
-const ruleFormRef = ref<FormInstance>();
 const addDayNews = () => {
-  isShow.value = false
-  router.push({ path: "/dayNews/addNews"});
+  router.push({ path: "/addNews"});
 };
 const handleDelete = ()=>{
   elMessage('您确定要删除这条记录吗?')
 }
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  formEl.resetFields();
-};
+
+// const resetForm = (formEl: InstanceType<typeof MyForm> ) => {
+//   if (!formEl.ruleFormRef) return;
+//   formEl.ruleFormRef.resetFields();
+// };
 onMounted(async ()=>{
-     const res=  await getDayNewsListByRole("/day-news/byRole",{status:2})
+     const res=  await getDayNewsListByRole("/day-news/byRole",{status:2,userId:user.value?.id})
     const {status,data} = res
     if(status === 200){
       tableData.value = data
@@ -148,10 +155,7 @@ onMounted(async ()=>{
     }
      
 })
-onActivated(()=>{
-  
-  isShow.value=true
-})
+
 </script>
 
 <style scoped>

@@ -5,6 +5,8 @@ export class CreateTestDto {
     status:number
     @IsNumber()
     type_id:number
+    @IsNumber()
+    userId:number
     @IsString()
     test_type:string
 }

@@ -4,6 +4,8 @@
   "compilerOptions": {
     "ignoreDeprecations":"5.0",
     "composite": true,
-    "types": ["node"]
+    "types": ["node",
+  "vite-plugin-svg-icons/client"
+  ]
   }
 }

@@ -16,6 +16,7 @@
         label="操作"
         align="center"
         width="180px"
+        v-if="isOperation"
       >
         <template #default="scope">
           <div style="display: flex; justify-content: center">
@@ -42,13 +43,16 @@ import { View, Delete } from "@element-plus/icons-vue";
 import { ElMessageBox } from "element-plus";
 import { useTestStore } from "@/stores/test";
 import { storeToRefs } from "pinia";
-import { getTestedList } from "@/utils/api";
+import { getTesListByRole} from "@/utils/api";
 import { dateFormat } from "@/utils/formatTimePlus";
 import { elMessage } from "@/utils/myElMessage";
+import { useUserStore } from "@/stores/user";
 const { testList } = storeToRefs(useTestStore());
-
+const { user } = storeToRefs(useUserStore());
 const tableData = ref<any[]>([]);
-
+  defineProps<{
+ isOperation:boolean
+}>()
 const typeChange = (scope: any) => {
   switch (scope.row.status) {
     case 1:
@@ -83,7 +87,10 @@ onActivated(() => {
 });
 
 onMounted(async () => {
-  const res = await getTestedList("/test/tested");
+  const res = await getTesListByRole("/test/ByRole",{
+    status:2,
+    userId:user.value?.id
+  });
   const formatDate = res.data.map((item: any) => {
     return {
       ...item,

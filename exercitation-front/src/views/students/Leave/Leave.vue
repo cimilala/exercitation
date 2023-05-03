@@ -3,7 +3,7 @@
     <div class="title">
       <span>请假申请</span>
     </div>
-    <div class="daynews" v-if="isShow">
+    <div class="daynews" >
       <div class="search">
         <el-button :icon="Search" type="primary" @click="search"
           >搜索</el-button
@@ -76,13 +76,7 @@
         </template>
       </el-dialog>
     </div>
-    <div class="router" v-else>
-      <router-view v-slot="{ Component }">
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
-      </router-view>
-    </div>
+   
   </div>
   <el-dialog v-model="dialogTableVisible" title="相关材料证明">
     <Upload :fileList="fileList" />
@@ -98,18 +92,21 @@
 <script setup lang="ts">
 import { onActivated, onMounted, reactive, ref } from "vue";
 import router from "@/router";
-import { Search, RefreshLeft } from "@element-plus/icons-vue";
+import { Search, RefreshLeft, User } from "@element-plus/icons-vue";
 import { getChangeListByRole } from "@/utils/api";
 import { elMessage } from "@/utils/myElMessage";
 import type { FormInstance, UploadUserFile } from "element-plus";
 import { tableSearch } from "@/utils/tableSerach";
 import formateTime from "@/utils/formatTime";
 import Table from "@/components/Table/Table.vue";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user";
 const tableData = ref<any[]>([]);
+  const ruleFormRef = ref<FormInstance>();
 const isShow = ref(true);
 const fileList = ref<UploadUserFile[]>([]);
 const size = ref<"default" | "large" | "small">("default");
-
+const {user} = storeToRefs(useUserStore())
 const filtableData = ref<Apply[]>([]);
 const options = ref<any[]>([
   {
@@ -143,7 +140,8 @@ const prove = (row: any) => {
     });
   });
 };
-const handleDelete = () => {
+const handleDelete = (index:number,row:unknown) => {
+ 
   elMessage("您确定要删除这条记录吗?");
 };
 const handleCancel = () => {
@@ -163,10 +161,9 @@ const search = () => {
     }, 
     tableData.value);
 };
-const ruleFormRef = ref<FormInstance>();
 const addLeave = () => {
   isShow.value = false;
-  router.push({ path: "/leave/addLeave" });
+  router.push({ path: "/addLeave" });
 };
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
@@ -175,6 +172,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 onMounted(async () => {
   const res = await getChangeListByRole("/internship-leave/byRole", {
     status: 2,
+    user:user.value?.id
   });
   const { status, data } = res;
   if (status === 200) {

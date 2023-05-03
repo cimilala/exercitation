@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="ruleForm" ref="form" label-width="150px">
+    <el-form  ref="form" label-width="150px">
       <div class="updateinfo">
         <div class="left">
           <el-form-item label="头像" prop="photo">
@@ -60,7 +60,7 @@ const {user_info} = storeToRefs(useUserInfo())
 const fileList = ref<UploadUserFile[]>([
   {
     name: 'plant-1.png',
-    url: `http://localhost:3000/images/${user.value?.photo}.jpg`,
+    url: `http://localhost:3000/images/${user.value?.photo}`,
   },
 
 ])

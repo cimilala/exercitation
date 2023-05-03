@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Repository } from 'typeorm';
+import { In, Repository } from "typeorm";
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -34,5 +34,8 @@ export class UserService {
   }
   getUser(username:string){
     return this.userRepository.findOne({where:{username}})
+  }
+  getUserByIds(userIds:any[]){
+    return this.userRepository.find({where:{id:In(userIds)}})
   }
 }

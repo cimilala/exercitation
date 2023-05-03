@@ -15,7 +15,10 @@ export class TestController {
   findAll() {
     return this.testService.findAll();
   }
-
+@Post("/ByRole")
+findByRole(@Body() entity:UpdateTestDto){
+    return this.testService.findTestByRole(entity)
+}
   @Get('getOne/:id')
   findOne(@Param('id') id: string) {
     return this.testService.findOne(+id);

@@ -11,5 +11,7 @@ export class StuStatus {
     @Column()
     apply_status:number
     @Column()
-    select_id:number
+    internship_type:string
+    @Column()
+    internship_self:boolean
 }

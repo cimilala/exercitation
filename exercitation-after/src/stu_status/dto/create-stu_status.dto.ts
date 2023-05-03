@@ -1,4 +1,4 @@
-import {  IsNumber } from "class-validator"
+import { IsBoolean, IsNumber, IsString } from "class-validator";
 
 export class CreateStuStatusDto {
     @IsNumber()
@@ -7,6 +7,8 @@ export class CreateStuStatusDto {
     internship_applyId:number
     @IsNumber()
     apply_status:number
-    @IsNumber()
-    select_id:number
+    @IsString()
+    internship_type:string
+    @IsBoolean()
+    internship_self:boolean
 }

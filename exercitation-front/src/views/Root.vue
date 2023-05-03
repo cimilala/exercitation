@@ -13,8 +13,9 @@ const changespan = (value: boolean) => {
  <div class="common-layout">
     <el-container class="container">
        <!-- 侧边栏 -->
-      <el-aside  style="background-color:#545c64;" :width="isCollapse ? '60px':'200px'"> 
-         <Menu :isCollapse="isCollapse"></Menu>
+      
+      <el-aside  style="background-color:#545c64; " :width="isCollapse ? '60px':'200px'"> 
+         <Menu :isCollapse="isCollapse" style="position: fixed;"></Menu>
         </el-aside>
           <!-- 右边部分 -->
     <el-container class="right">
@@ -28,9 +29,11 @@ const changespan = (value: boolean) => {
         <!-- 内容 -->
       <el-main>
         <router-view v-slot="{Component}">
+          
           <keep-alive>
-            <component :is="Component" />
+              <component :is="Component" />
           </keep-alive>
+       
         </router-view>
       </el-main>
     </el-container>

@@ -7,30 +7,38 @@
             <img :src="url" alt="" />
           </div>
           <div>{{ user?.username }}</div>
-          <div class="header_info">
-            <div>
-              <el-icon :size="20"> <Location /> </el-icon><span>{{ user_info?.college }}</span>
-            </div>
-            <div>
-              <el-icon :size="20"> <ChatDotRound /> </el-icon
-              ><span>{{ user_info?.wechat }}</span>
-            </div>
-            <div>
-              <el-icon :size="20">
-                <Phone />
-              </el-icon>
-              <span>{{ user_info?.phone }}</span>
-            </div>
-            <div>
-              <el-icon :size="20">
-                <Message />
-              </el-icon>
-              <span>{{ user_info?.email }}</span>
-            </div>
+          <div class="header_info" style=" width: 100%;">
+            <ul class="list-group list-group-striped">
+              <li class="list-group-item">
+                <span class="text-color">
+                  <svg-icon name="school" class="mr5" :size="'1.5em'" />学校
+                </span>
+                <div class="pull-right">{{ user_info?.school }}</div>
+              </li>
+              <li class="list-group-item">
+                <span class="text-color">
+                  <svg-icon name="user" class="mr5" size="1.5em" />用户名称
+                </span>
+                <div class="pull-right">{{ user?.username }}</div>
+              </li>
+              <li class="list-group-item">
+                <span class="text-color">
+                  <svg-icon name="iphone"   size="1.5em" class="mr5" />手机号码
+                </span>
+                <div class="pull-right">{{ user_info?.phone }}</div>
+              </li>
+              <li class="list-group-item">
+                <span class="text-color">
+                   <svg-icon name="email" class="mr5"  size="1.5em"/>用户邮箱
+                </span>
+                <div class="pull-right">{{ user_info?.email }}</div>
+              </li>
+              
+            </ul>
           </div>
         </div>
         <div class="header_center">
-          <div style="text-align: center"><span>个人信息</span></div>
+          <div style="text-align: center"><span>基本信息</span></div>
           <div class="header_center_info">
             <div>
               <span>姓名:{{ user_info?.name }}</span>
@@ -48,7 +56,7 @@
             <span>个性签名</span>
             <el-input
             :value="user_info.per_signature"
-              :rows="5"
+              :rows="8"
               type="textarea"
               placeholder="Please input"
               readonly
@@ -64,26 +72,24 @@
     <div class="context">
       <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
         <el-tab-pane label="正在进行的任务" name="first">
-          <Testing />
+          <Testing :is-operation="true"  />
         </el-tab-pane>
         <el-tab-pane label="已经完成的任务" name="second">
-          <Tested />
+          <Tested :is-operation="true" />
         </el-tab-pane>
       </el-tabs>
     </div>
+    
+   
   </div>
+  
 </template>
 
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
 import { reactive, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
-import {
-  Message,
-  ChatDotRound,
-  Phone,
-  Location,
-} from "@element-plus/icons-vue";
+
 import echarts from "@/components/Echarts/Echarts.vue";
 import Testing from "@/components/Testing/Testing.vue";
 import Tested from "@/components/Tested/Tested.vue";
@@ -143,6 +149,10 @@ watch(
 );
 </script>
 <style lang="less" scoped>
+.person_center {
+  box-sizing: border-box;
+  width: 100%;
+}
 .header {
   width: 100%;
   height: 350px;
@@ -176,8 +186,8 @@ watch(
       padding-right: 20px;
       padding-top: 50px;
       .header_info {
+       
         & > div {
-          padding-left: 20px;
           margin-top: 10px;
         }
       }
@@ -188,7 +198,7 @@ watch(
   }
 
   .person_right {
-    width: 500px;
+    width: 480px;
     margin-left: 30px;
   }
 }
@@ -203,5 +213,29 @@ watch(
   color: #6b778c;
   font-size: 32px;
   font-weight: 600;
+}
+.list-group-striped > .list-group-item {
+	border-left: 0;
+	border-right: 0;
+	border-radius: 0;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.list-group {
+	padding-left: 0px;
+	list-style: none;
+}
+
+.list-group-item {
+	border-bottom: 1px solid #e7eaec;
+	border-top: 1px solid #e7eaec;
+	margin-bottom: -1px;
+	padding: 11px 0px;
+	font-size: 14px;
+}
+
+.pull-right {
+	float: right !important;
 }
 </style>

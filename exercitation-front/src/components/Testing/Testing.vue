@@ -16,6 +16,7 @@
         label="操作"
         align="center"
         width="180px"
+        v-if="isOperation"
       >
         <template #default="scope">
           <div style="display: flex; justify-content: center">
@@ -38,29 +39,38 @@
       </el-table-column>
     </el-table>
   </div>
+  <MyDialog 
+  title="haha"
+  ref="myDialog"></MyDialog>
 </template>
 
 <script setup lang="ts">
 import { onActivated, onMounted, ref } from "vue";
-import { View, CircleCloseFilled } from "@element-plus/icons-vue";
+import { View, CircleCloseFilled, User } from "@element-plus/icons-vue";
 import { useTestStore } from "@/stores/test";
 import { storeToRefs } from "pinia";
-import { getChangeById, getDayNewsById, getLeaveById, getTestingList } from "@/utils/api";
+import { getChangeById, getDayNewsById, getLeaveById, getTesListByRole } from "@/utils/api";
 import { dateFormat } from "@/utils/formatTimePlus";
 import { elMessage } from "@/utils/myElMessage";
-import router from "@/router";
-import { useRouter } from "vue-router";
+import MyDialog from "../MyElComponents/MyDialog.vue";
+import { useUserStore } from "@/stores/user";
+const myDialog = ref()
 const tableData = ref<any[]>([]);
-const push = useRouter()
+  const { user } = storeToRefs(useUserStore());
 const handleApplyCancel = (index: number, row: any) => {
   elMessage('您确定要取消申请吗?')
 };
+ defineProps<{
+ isOperation:boolean
+}>()
 const detailClick = async (index:string,row:any)=>{
-  console.log(row);
+  // console.log(row);
   
   if(row.test_type==="请假申请"){
-   
+    myDialog.value.dialogVisible = true
    const res =await getLeaveById(`/internship-leave/${row.type_id}`)
+   console.log(res.data);
+   
   
   }else if(row.test_type==="实习变更"){
     const res =await getChangeById(`/internship-change/${row.type_id}`)
@@ -105,7 +115,10 @@ onActivated(() => {
 });
 
 onMounted(async () => {
-  const res = await getTestingList("/test/testing");
+  const res = await getTesListByRole("/test/ByRole",{
+    status:1,
+    userId:user.value?.id
+  });
   const formatDate = res.data.map((item: any) => {
     return {
       ...item,

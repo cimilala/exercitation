@@ -1,10 +1,11 @@
 <template>
         <div>
-            <el-upload v-model:file-list="props.fileList" :headers="headers" action="http://localhost:3000/upload"
+            <el-upload v-model:file-list="fileList" :headers="headers" action="http://localhost:3000/upload"
           list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
           :on-success="uploadSuccess"
           :on-error = "uploadError"
           :before-upload="beforeUpload"
+         
           ref="uploadRef">
           <el-icon>
             <Plus />
@@ -21,9 +22,15 @@ import type { UploadFile, UploadFiles, UploadInstance, UploadProps, UploadRawFil
 import {  reactive, ref } from 'vue';
 import { Plus} from '@element-plus/icons-vue'
 const uploadRef = ref<UploadInstance>()
-const props = defineProps<{
-  fileList:UploadUserFile[]
-}>()
+  const fileList = ref<UploadUserFile[]>([]);
+
+// const props = defineProps<{
+//   fileList?:UploadUserFile[]
+// }>()
+defineExpose({
+  uploadRef,
+  fileList
+})
 const emit =defineEmits<{
   (e: 'imgurl', value:string): void
 }>()
@@ -58,15 +65,15 @@ const beforeUpload = (file:UploadRawFile)=>{
   const isLt2M = file.size /1024/1024 < 2;
           // const fileType = file.name.substring(file.name.lastIndexOf('.')+1)
           // 判断图片的类型
-          const isJpg = file.type ==  'image/jpeg' || file.type == 'image/jpg' || file.type == 'image/png' || file.type == 'image/gif'
-          if(!isJpg){
-              alert('只能上传jpg, jpeg, png, gif格式的图片！')
-              return false
-          }
-          if (!isLt2M) {
-             alert('上传图片大小不能超过 2MB!');
-              return false
-          }
+          // const isJpg = file.type ==  'image/jpeg' || file.type == 'image/jpg' || file.type == 'image/png' || file.type == 'image/gif'
+          // if(!isJpg){
+          //     alert('只能上传jpg, jpeg, png, gif格式的图片！')
+          //     return false
+          // }
+          // if (!isLt2M) {
+          //    alert('上传图片大小不能超过 2MB!');
+          //     return false
+          // }
 }
 </script>
     

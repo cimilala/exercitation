@@ -15,6 +15,10 @@ import { DayNewsModule } from './day-news/day-news.module';
 import { InternshipChangeModule } from './internship-change/internship-change.module';
 import { InternshipLeaveModule } from './internship-leave/internship-leave.module';
 import { TestModule } from './test/test.module';
+import { InstituteModule } from './institute/institute.module';
+import { GradeModule } from './grade/grade.module';
+import { SelfApplyModule } from './self-apply/self-apply.module';
+import { TeacherInfoModule } from './teacher-info/teacher-info.module';
 @Module({
   imports: [
     AuthModule,
@@ -41,7 +45,11 @@ import { TestModule } from './test/test.module';
     DayNewsModule,
     InternshipChangeModule,
     InternshipLeaveModule,
-    TestModule
+    TestModule,
+    InstituteModule,
+    GradeModule,
+    SelfApplyModule,
+    TeacherInfoModule
   ],
   controllers: [AppController],
   providers: [AppService],

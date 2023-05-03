@@ -10,13 +10,13 @@ export class InternshipApply {
     @Column()
     place:string;
     @Column()
-    totalNumber:number;
+    total_number:number;
     @Column()
-    currentNumber:number;
+    current_number:number;
     @Column()
-    startTime:string;
+    start_time:string;
     @Column()
-    endTime:string;
+    end_time:string;
     @Column()
     teacher:string
     @Column()

@@ -9,8 +9,9 @@ export const IntershipList = (url:string) =>http.get(url)
 export const updateUserStatus = (url:string,params:any) =>http.patch(url,params)
 //用户登录成功后获取用户信息
 export const getUser =(url:string,params:any ) =>http.post<User>(url,params)
-//根据用户id查询用户详细信息
-export const getUserInfo = (url:string,params:unknown)=>http.post(url,params)
+//根据用户id查询学生用户详细信息
+export const getStuInfo = (url:string,params:unknown)=>http.post(url,params)
+export const getTeacherInfo = (url:string,params:unknown)=>http.post(url,params)
 //修改用户信息
 export const UpdateInfo = (url:string,params:any)=> http.patch(url,params)
 //获取用户状态信息
@@ -47,7 +48,17 @@ export const updateLeave = (url:string,params:unknown)=>http.patch(url,params)
 export const addTesting = (url:string,params:unknown)=>http.post(url,params)
 //获取所有任务列表
 export const getTestingAllList = (url:string)=>http.get(url)
-//获取正在进行的任务列表
-export const getTestingList = (url:string)=>http.get(url)
+//获取任务列表
+export const getTesListByRole = (url:string,params:unknown)=>http.post(url,params)
 //获取已经完成的任务列表
-export const getTestedList = (url:string)=>http.get(url)
+export const addPersonApply = (url:string,params:unknown)=>http.post(url,params)
+//根据角色id查询自主实习申请
+export const getPseronApplyByRole = (url:string,params:unknown)=>http.post(url,params)
+//查询正在申请集中实习的学生
+export const getIsApply = (url:string)=>http.get(url)
+//获取正在进行的实习变更
+export const getIsChange = (url:string)=>http.get(url)
+//修改自主实习申请状态
+export const updateSelfStatus = (url:string,params:unknown)=>http.patch(url,params)
+//查询正在自主实习申请的学生
+export const getSelfApply = (url:string)=>http.get(url)

@@ -1,13 +1,12 @@
 import {
-  Controller,
+  Controller, Get,
   Post,
   UploadedFile,
-  UploadedFiles,
-  UseInterceptors,
-} from '@nestjs/common';
+  UseInterceptors
+} from "@nestjs/common";
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { UploadService } from './upload.service';
-import { Express } from 'express';
+import { Express, response } from "express";
 @Controller()
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
@@ -15,5 +14,15 @@ export class UploadController {
   @Post('/upload')
   upload(@UploadedFile() file: Express.Multer.File) {
     return file;
+  }
+  @Get("/download")
+  download(){
+    response.download("/public/images/1682907562198.docx",(err)=>{
+      if(!err) {
+        console.log("success","download");
+        return
+      }
+      response.send("下载失败")
+    })
   }
 }

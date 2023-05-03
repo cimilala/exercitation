@@ -1,6 +1,11 @@
 <template>
   <div class="addNews">
     <div class="info">
+      <el-button  type="success" :icon="Check" @click="saveDraft(ruleFormRef)">保存草稿箱</el-button>
+    <el-button  type="primary" :icon="Position"  @click="submitForm(ruleFormRef)">提交</el-button>
+    <el-button type="info" :icon="RefreshLeft" @click="resetForm(ruleFormRef)"
+        >重置</el-button
+      >
       <el-form
     ref="ruleFormRef"
     :model="ruleForm"
@@ -13,11 +18,7 @@
       <el-input v-model.trim="ruleForm.title"  />
     </el-form-item>
     
-    <el-button  type="success" :icon="Check" @click="saveDraft(ruleFormRef)">保存草稿箱</el-button>
-    <el-button  type="primary" :icon="Position"  @click="submitForm(ruleFormRef)">提交</el-button>
-    <el-button type="info" :icon="RefreshLeft" @click="resetForm(ruleFormRef)"
-        >重置</el-button
-      >
+    
   </div>
   
     <div class="context">
@@ -51,6 +52,7 @@
 </template>
     
 <script setup lang='ts'>
+import BasicEditor from "@/components/BasicEditor/BasicEditor.vue"
 import {  onDeactivated, reactive, ref, } from "vue";
 import {Check,Position,RefreshLeft} from '@element-plus/icons-vue'
 import { addNews, addTesting } from "@/utils/api";
@@ -99,6 +101,7 @@ const submitForm=(formEl: FormInstance | undefined)=>{
           type_id: res.data.id,
           test_type: "新增日报",
           status: 1,
+          userId:user.value?.id
         });
         if(testres.status===200){
           testList.value.push({

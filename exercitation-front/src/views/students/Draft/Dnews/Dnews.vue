@@ -27,7 +27,16 @@
       :rows="18"
       type="textarea"
       placeholder="Please input"
-  /></el-dialog>
+  />
+  <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogTableVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="dialogTableVisible = false">
+          Confirm
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">

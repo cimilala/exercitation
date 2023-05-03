@@ -31,7 +31,7 @@ export class DayNewsController {
     return this.dayNewsService.remove(+id);
   }
   @Post("/byRole")
-  find(@Body() body:UpdateDayNewDto){
-    return this.dayNewsService.find(body)
+  find(@Body() entityLike:UpdateDayNewDto){
+    return this.dayNewsService.find(entityLike)
   }
 }

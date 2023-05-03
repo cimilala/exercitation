@@ -1,8 +1,9 @@
 export default [
+  //学生
   {
     path: "home",
     name: "home",
-    component: () => import("@/views/students/Home/Home.vue"),
+    component: () => import("@/views/index.vue"),
     meta: {
       title: "首页",
       roles: ["admin", "student", "teacher"],
@@ -14,7 +15,16 @@ export default [
     component: () => import("@/views/students/Apply/Apply.vue"),
     meta: {
       title: "实习申请",
-      roles: [ "student"],
+      roles: ["student","teacher"],
+    },
+  },
+  {
+    path: "person_apply",
+    name: "person_apply",
+    component: () => import("@/views/students/Person_Apply/PersonApply.vue"),
+    meta: {
+      title: "自主实习申请",
+      roles: ["student","teacher"],
     },
   },
   {
@@ -23,19 +33,17 @@ export default [
     component: () => import("@/views/students/Change/Change.vue"),
     meta: {
       title: "实习变更",
-      roles: [ "student"],
+      roles: ["student","teacher"],
     },
-    children:[
-      {
-        path: "addChange",
-        name: "addChange",
-        component: () => import("@/views/students/Change/AddChange/AddChange.vue"),
-        meta: {
-          title: "新增实习变更",
-          roles: ["student"],
-        },
-      }
-    ]
+  },
+  {
+    path: "addChange",
+    name: "addChange",
+    component: () => import("@/views/students/Change/AddChange/AddChange.vue"),
+    meta: {
+      title: "新增实习变更",
+      roles: ["student"],
+    },
   },
   {
     path: "dayNews",
@@ -43,20 +51,17 @@ export default [
     component: () => import("@/views/students/DayNews/DayNews.vue"),
     meta: {
       title: "实习日报",
-      roles: [ "student"],
+      roles: ["student"],
     },
-   
-    children:[
-      {
-      path: "addNews",
-      name: "addNews",
-      component: () => import("@/views/students/AddNews/AddNews.vue"),
-      meta: {
-        title: "新增实习日报",
-        roles: ["student"],
-      },
-    }
-  ]
+  },
+  {
+    path: "addNews",
+    name: "addNews",
+    component: () => import("@/views/students/AddNews/AddNews.vue"),
+    meta: {
+      title: "新增实习日报",
+      roles: ["student"],
+    },
   },
   {
     path: "summary",
@@ -64,7 +69,7 @@ export default [
     component: () => import("@/views/students/Summary/Summary.vue"),
     meta: {
       title: "实习总结",
-      roles: [ "student"],
+      roles: ["student"],
     },
   },
 
@@ -74,41 +79,37 @@ export default [
     component: () => import("@/views/students/Grade/Grade.vue"),
     meta: {
       title: "实习成绩",
-      roles: [ "student"],
+      roles: ["student"],
     },
-    children:[
-      {
-        path: "grade_absent",
-        name: "grade_absent",
-        component: () =>
-          import("@/views/students/Grade/GradeAbsent/GradeAbsent.vue"),
-        meta: {
-          title: "出勤信息",
-          roles: [ "student"],
-        },
-      },
-    ]
   },
- 
+  {
+    path: "grade_absent",
+    name: "grade_absent",
+    component: () =>
+      import("@/views/students/Grade/GradeAbsent/GradeAbsent.vue"),
+    meta: {
+      title: "出勤信息",
+      roles: ["student"],
+    },
+  },
+
   {
     path: "leave",
     name: "leave",
     component: () => import("@/views/students/Leave/Leave.vue"),
     meta: {
       title: "请假申请",
-      roles: [ "student"],
+      roles: ["student"],
     },
-    children:[
-      {
-        path: "addLeave",
-        name: "addLeave",
-        component: () => import("@/views/students/Leave/addLeave/addLeave.vue"),
-        meta: {
-          title: "新增请假",
-          roles: ["student"],
-        },
-      }
-    ]
+  },
+  {
+    path: "addLeave",
+    name: "addLeave",
+    component: () => import("@/views/students/Leave/addLeave/addLeave.vue"),
+    meta: {
+      title: "新增请假",
+      roles: ["student"],
+    },
   },
   {
     path: "person_center",
@@ -125,7 +126,7 @@ export default [
     component: () => import("@/views/students/SelfEdit/SelfEdit.vue"),
     meta: {
       title: "编辑资料",
-      roles: [ "student"],
+      roles: ["student"],
     },
   },
   {
@@ -137,5 +138,6 @@ export default [
       roles: ["student"],
     },
   },
- 
+  //教师
+  
 ];

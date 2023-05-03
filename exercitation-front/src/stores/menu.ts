@@ -9,13 +9,12 @@ export const useMenuStore = defineStore("menuList", () => {
       return menuList.value?.filter((item: any) => {
         if (item.parent_id === params) {
           let children = r(item.id);
-          item.children = children?.length ? children : null;
+          item.children = children?.length ? children : [];
           return true;
         }
       });
     }
-    menuList.value = r(-1);
-    return menuList;
+    return r(-1);
   });
   const saveMenuList = async () => {
     if (localStorage.getItem("token")) {

@@ -10,8 +10,10 @@
       <el-button :icon="Upload" size="small"> Upload</el-button>
     </div>
     <div class="table">
+     
       <el-table :data="tableData" border style="width: 100%">
-        <el-table-column type="selection" width="55" />
+        
+          <el-table-column type="selection" width="55" />
         <el-table-column
           v-for="item in options"
           :prop="item.prop"
@@ -20,7 +22,6 @@
         ></el-table-column>
         <slot name="img"></slot>
         <slot name="detail"></slot>
-        <slot name="status"></slot>
         <el-table-column prop="status" label="审核状态" align="center">
           <template #default="scope">
             <el-tag :type="typeChange(scope)"
@@ -51,7 +52,6 @@
               </el-button>
               <el-button
               v-show="cancel"
-             
                 type="danger"
                 size="small"
                 plain
@@ -77,7 +77,10 @@
             </div>
           </template>
         </el-table-column>
+        
+       
       </el-table>
+   
     </div>
   </div>
 </template>
@@ -156,4 +159,5 @@ const isapply = (scope: any) => {
     margin-top: 20px;
   }
 }
+
 </style>

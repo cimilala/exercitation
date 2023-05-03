@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from "typeorm";
 import { CreateInternshipApplyDto } from './dto/create-internship-apply.dto';
 import { UpdateInternshipApplyDto } from './dto/update-internship-apply.dto';
 import { InternshipApply } from './entities/internship-apply.entity';
@@ -16,10 +16,12 @@ export class InternshipApplyService {
     return this.InternshipApplyRepository.save(internshipApp)
   }
 
-  findAll() {
-    return this.InternshipApplyRepository.find()
+  find(a:any[]) {
+    return this.InternshipApplyRepository.find({where:{id:In(a)}})
   }
-
+findAll(){
+    return this.InternshipApplyRepository.find()
+}
   findOne(id: number) {
     return this.InternshipApplyRepository.findOneBy({id});
   }
@@ -32,5 +34,8 @@ export class InternshipApplyService {
 async  remove(id:number) {
     const internshipApp =await this.findOne(id)
     return this.InternshipApplyRepository.remove(internshipApp)
+  }
+  pagination(skip:number,take:number){
+   return this.InternshipApplyRepository.find({skip,take})
   }
 }

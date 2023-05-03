@@ -31,4 +31,5 @@ export class RoleMenuController {
   remove(@Param('id') id: string) {
     return this.roleMenuService.remove(+id);
   }
+
 }

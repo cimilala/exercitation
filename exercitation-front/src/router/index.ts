@@ -1,6 +1,6 @@
 import { useMenuStore } from "@/stores/menu";
 import { createRouter, createWebHistory } from "vue-router";
-
+import { close, start } from '@/utils/nprogress'
 const routes = [
   {
     path: "/",
@@ -27,6 +27,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+ 
   if (
     // 检查用户是否已登录
     !localStorage.getItem("token") &&
@@ -39,9 +40,14 @@ router.beforeEach((to, from, next) => {
     if(to.name==="/"){
       next({ name: "home" });
     }else {
+    
       next();
     }
    
   }
+  start()
 });
+router.afterEach(() => {
+  close()
+})
 export default router;

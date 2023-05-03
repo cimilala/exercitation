@@ -5,13 +5,20 @@
   timestamp: string;
   message: string;
 }
+interface IMenu {
+  id:number
+  name:string
+  type:number
+  path:string
+  icon:string
+  parent_id:number
+  children?:Array<any>|null
+}
 interface User {
   id: number | null;
-  name: string | null;
   roleId: number | null;
-  sex: string | null;
   username: string | null;
-  photo: string | null;
+  
 }
  interface StuStatus {
   userId: number;
@@ -28,10 +35,10 @@ enum IntershipType {
   id: number;
   position: string;
   place: string;
-  totalNumber: number;
-  currentNumber: number;
-  startTime: string;
-  endTime: string;
+  total_number: number;
+  current_number: number;
+  start_time: string;
+  end_time: string;
   teacher: string;
   type: IntershipType;
   //伪属性
@@ -49,10 +56,42 @@ enum IntershipType {
   id = "id",
   position = "position",
   place = "place",
-  totalNumber = "totalNumber",
-  currentNumber = "currentNumber",
-  startTime = "startTime",
-  endTime = "endTime",
+  total_number = "total_number",
+  current_number = "current_number",
+  start_time = "start_time",
+  end_time = "end_time",
   teacher = "teacher",
   type = "type",
+}
+interface ISelectType  {
+  name:"select",
+  options:any[]
+}
+interface ICustom{
+name:"custom",
+slotName:string
+}
+
+interface IInput {
+  name:"input"
+}
+interface IDatePicker  {
+  name:"data-picker"
+}
+
+type m = ISelectType|ICustom|IInput|TDatePicker
+  interface IformConfig<T extends m> {
+  type:T
+  label:string
+  prop:string
+  value?:any
+}
+
+interface ITableConfig{
+  label?:string
+  prop:string
+  type:string
+  width?:string
+  slotName?:string
+  fixed?:string |boolean
 }

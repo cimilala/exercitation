@@ -160,6 +160,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
           type_id:res.data.id,
           test_type:"请假申请",
           status: 1,
+          userId:user.value?.id
         });
         if(testres.status === 200) {
           testList.value.push({

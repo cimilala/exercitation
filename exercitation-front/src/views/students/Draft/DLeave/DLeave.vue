@@ -36,6 +36,7 @@
 import { onActivated, onMounted, ref } from "vue";
 import Table from "@/components/Table/Table.vue";
 import { usedraftLeave } from "@/stores/draft_leave";
+import Upload from "@/components/Upload/Upload.vue";
 import {
   ElMessage,
   ElMessageBox,
@@ -84,8 +85,11 @@ const handleApplyClick = async (index: number, row: any) => {
   }
 };
 const handleApplyCancel = () => {};
-const handleDelete = () => {
-  elMessage("您确定要删除这条记录吗?")
+const handleDelete = (index:number,row:any) => {
+  tableData.value = tableData.value.filter((item)=>{
+    item.id !== row.id
+  })
+  // elMessage("您确定要删除这条记录吗?")
 };
 const handleConfirm = () => {
   dialogTableVisible.value = false;
